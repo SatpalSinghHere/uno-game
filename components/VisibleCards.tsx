@@ -1,32 +1,22 @@
 'use client'
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import card from '@/utils/card.svg';
 import CardTemplate from '@/utils/Card';
 
 import { Card, cardList } from '@/utils/cardObjects';
+import { centralCardContext } from '@/app/context/centralCardContext';
 
-
-import { useMutation, useStorage } from '@liveblocks/react/suspense';
-import { LiveObject } from '@liveblocks/client';
 
 const VisibleCards = () => {
   
   const [cards, setCards] = React.useState(cardList);
   const [midIndex, setMidIndex] = React.useState(0);
 
-  const centralCard = useStorage((root) => root.centralCard) as {color: string, value: string};
-
-  const updateCentralCard = useMutation(({ storage }, newCard: Card) => {
-    let thisCentralCard = storage.get("centralCard") as LiveObject<{color: string, value: string}>;
-    console.log(thisCentralCard)
-    
-    thisCentralCard.set("color", newCard.color);
-    thisCentralCard.set("value", newCard.value);
-  }, []);
+  const centralCardBody = useContext(centralCardContext)
 
   const useCard = (cardObject: Card) => {
-    if(centralCard.color === cardObject.color || centralCard.value === cardObject.value){
-      updateCentralCard(cardObject)
+    if(centralCardBody?.centralCard.color === cardObject.color || centralCardBody?.centralCard.value === cardObject.value){
+      centralCardBody?.newCentralCard(cardObject)
     }
     
   };
