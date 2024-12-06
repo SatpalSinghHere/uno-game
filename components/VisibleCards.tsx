@@ -4,7 +4,7 @@ import card from '@/utils/card.svg';
 import CardTemplate from '@/utils/Card';
 
 import { Card, cardList } from '@/utils/cardObjects';
-import { centralCardContext } from '@/app/context/centralCardContext';
+import { centralCardContext } from '@/app/context/centralCard';
 
 
 const VisibleCards = () => {

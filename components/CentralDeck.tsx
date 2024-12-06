@@ -1,4 +1,4 @@
-import { centralCardContext } from '@/app/context/centralCardContext';
+import { centralCardContext } from '@/app/context/centralCard';
 import CardTemplate from '@/utils/Card';
 import { Card, cardList } from '@/utils/cardObjects';
 
