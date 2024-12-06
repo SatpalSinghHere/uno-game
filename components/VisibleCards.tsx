@@ -16,7 +16,7 @@ const VisibleCards = () => {
 
   const useCard = (cardObject: Card) => {
     if(centralCardBody?.centralCard.color === cardObject.color || centralCardBody?.centralCard.value === cardObject.value){
-      centralCardBody?.newCentralCard(cardObject)
+      centralCardBody?.emitNewCentralCard(cardObject)
     }
     
   };
