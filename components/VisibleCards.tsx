@@ -4,7 +4,8 @@ import card from '@/utils/card.svg';
 import CardTemplate from '@/utils/Card';
 
 import { Card, cardList } from '@/utils/cardObjects';
-import { centralCardContext } from '@/app/context/centralCard';
+
+import { socketContext } from '@/app/context/SocketProvider';
 
 
 const VisibleCards = () => {
@@ -12,7 +13,7 @@ const VisibleCards = () => {
   const [cards, setCards] = React.useState(cardList);
   const [midIndex, setMidIndex] = React.useState(0);
 
-  const centralCardBody = useContext(centralCardContext)
+  const centralCardBody = useContext(socketContext)
 
   const useCard = (cardObject: Card) => {
     if(centralCardBody?.centralCard.color === cardObject.color || centralCardBody?.centralCard.value === cardObject.value){

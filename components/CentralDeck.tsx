@@ -1,4 +1,4 @@
-import { centralCardContext } from '@/app/context/centralCard';
+import { socketContext } from '@/app/context/SocketProvider';
 import CardTemplate from '@/utils/Card';
 import { Card, cardList } from '@/utils/cardObjects';
 
@@ -12,7 +12,7 @@ const CentralDeck = () => {
     color: 'red',
     value: '1'
   }
-  const centralCard = useContext(centralCardContext)?.centralCard
+  const centralCard = useContext(socketContext)?.centralCard
   
   
   return (

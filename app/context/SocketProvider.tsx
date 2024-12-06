@@ -1,14 +1,26 @@
 import { Card, cardList } from '@/utils/cardObjects'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, createContext } from 'react'
 import { centralCardContext, CentralCardContext } from './centralCard'
 import { io, Socket } from 'socket.io-client'
-
 
 interface SocketProviderProps {
     children: React.ReactNode
 }
 
+export interface SocketContext {
+    playersOnline : string[]
+    centralCard : Card,
+    emitNewCentralCard : (card: Card) => void
+}
+
+export const socketContext = createContext<SocketContext | undefined>(undefined);
+
 const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
+
+    const [playersOnline, setPlayersOnline] = useState<string[]>(['Harry'])
+    const newOnlinePlayers = useCallback((str : string)=>{
+        console.log('New Online Players : ', str)
+    }, [])
 
     const [centralCard, setCentralCard] = useState(cardList[cardList.length - 1])
     const recNewCentralCard = useCallback((str: string) => {
@@ -19,7 +31,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
     const [socket, setSocket] = useState<Socket>()
 
-    const emitNewCentralCard: CentralCardContext['emitNewCentralCard'] = useCallback((card: Card)=>{
+    const emitNewCentralCard: SocketContext['emitNewCentralCard'] = useCallback((card: Card)=>{
         if(socket){
             console.log("Emitting new central card ", card)
             socket.emit('New Central Card', JSON.stringify(card))
@@ -32,6 +44,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
             console.log('connected to socket')
         })
         _socket.on('New Central Card', recNewCentralCard)
+        _socket.on('Online Players: ', newOnlinePlayers)
         setSocket(_socket)
 
         return () => {
@@ -40,9 +53,9 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     },[])
 
     return (
-        <centralCardContext.Provider value={{centralCard, emitNewCentralCard}}>
+        <socketContext.Provider value={{playersOnline, centralCard, emitNewCentralCard}}>
             {children}
-        </centralCardContext.Provider>
+        </socketContext.Provider>
     )
 }
 
