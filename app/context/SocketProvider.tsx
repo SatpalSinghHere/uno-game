@@ -17,9 +17,9 @@ export const socketContext = createContext<SocketContext | undefined>(undefined)
 
 const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
-    const [playersOnline, setPlayersOnline] = useState<string[]>(['Harry'])
-    const newOnlinePlayers = useCallback((str : string)=>{
-        setPlayersOnline((p)=> [...p, str])
+    const [playersOnline, setPlayersOnline] = useState<string[]>([])
+    const newOnlinePlayers = useCallback((players: string[])=>{
+        setPlayersOnline(players)
     }, [])
 
     const [centralCard, setCentralCard] = useState(cardList[cardList.length - 1])
@@ -44,7 +44,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
             console.log('connected to socket')
         })
         _socket.on('New Central Card', recNewCentralCard)
-        _socket.on('Online Players: ', newOnlinePlayers)
+        _socket.on('Online Players', newOnlinePlayers)
         setSocket(_socket)
 
         return () => {

@@ -3,14 +3,16 @@ import React, { useContext, useState } from 'react'
 import { socketContext } from '../../context/SocketProvider'
 
 const Waiting = () => {
-    const [players, setPlayers] = useState<string[] | undefined>(undefined)
+    
     const SocketContext = useContext(socketContext)
-
+    const players = SocketContext?.playersOnline
     console.log("Players Online", SocketContext?.playersOnline)
     
     return (
         <div>
-            Waiting Room
+            {players?.map((player,index) => {
+                return <li key={index}>{player}</li>
+            })}
         </div>
     )
 }
