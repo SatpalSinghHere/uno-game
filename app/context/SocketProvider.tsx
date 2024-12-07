@@ -2,6 +2,7 @@ import { Card, cardList } from '@/utils/cardObjects'
 import React, { useCallback, useEffect, useState, createContext } from 'react'
 import { centralCardContext, CentralCardContext } from './centralCard'
 import { io, Socket } from 'socket.io-client'
+import { redirect } from 'next/navigation'
 
 interface SocketProviderProps {
     children: React.ReactNode
@@ -11,6 +12,7 @@ export interface SocketContext {
     playersOnline : string[]
     centralCard : Card,
     emitNewCentralCard : (card: Card) => void
+    emitStartGame : () => void
 }
 
 export const socketContext = createContext<SocketContext | undefined>(undefined);
@@ -31,6 +33,15 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
     const [socket, setSocket] = useState<Socket>()
 
+    //emitters
+    const emitStartGame = useCallback(() => {
+        console.log("function call emit start game")
+        if(socket){
+            console.log("Emitting Start game")
+            socket.emit('Start Game', "starting game")
+        }
+    }, [socket])
+
     const emitNewCentralCard: SocketContext['emitNewCentralCard'] = useCallback((card: Card)=>{
         if(socket){
             console.log("Emitting new central card ", card)
@@ -45,6 +56,9 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         })
         _socket.on('New Central Card', recNewCentralCard)
         _socket.on('Online Players', newOnlinePlayers)
+        _socket.on('Start Game', () => {
+            redirect('/game')
+        })
         setSocket(_socket)
 
         return () => {
@@ -53,7 +67,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     },[])
 
     return (
-        <socketContext.Provider value={{playersOnline, centralCard, emitNewCentralCard}}>
+        <socketContext.Provider value={{playersOnline, centralCard, emitNewCentralCard, emitStartGame}}>
             {children}
         </socketContext.Provider>
     )
