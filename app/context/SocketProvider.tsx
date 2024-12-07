@@ -1,3 +1,5 @@
+'use client'
+
 import { Card, cardList } from '@/utils/cardObjects'
 import React, { useCallback, useEffect, useState, createContext } from 'react'
 import { centralCardContext, CentralCardContext } from './centralCard'

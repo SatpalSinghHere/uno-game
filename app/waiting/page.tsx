@@ -6,9 +6,9 @@ import Waiting from './components/Waiting'
 const page = () => {
     
     return (
-        <SocketProvider>
+        
             <Waiting />
-        </SocketProvider>
+        
     )
 }
 

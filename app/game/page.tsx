@@ -9,9 +9,9 @@ const GameRoom = () => {
   
 
   return (
-    <SocketProvider>
+    
       <PlayGround />
-    </SocketProvider>
+    
   )
 }
 
