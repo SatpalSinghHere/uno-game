@@ -29,18 +29,18 @@ const PlayGround = () => {
                     <option value="4">4</option>
                 </select> */}
                 <UsedCards />
-                {players === 2 && <PlayerTop />}
+                {players === 2 && <PlayerTop noOfCards={10} />}
                 {players === 3 && (
                     <>
-                        <PlayerLeft />
-                        <PlayerRight />
+                        <PlayerLeft noOfCards={10} />
+                        <PlayerRight noOfCards={10} />
                     </>
                 )}
                 {players === 4 && (
                     <>
-                        <PlayerLeft />
-                        <PlayerRight />
-                        <PlayerTop />
+                        <PlayerLeft noOfCards={10} />
+                        <PlayerRight noOfCards={10} />
+                        <PlayerTop noOfCards={10} />
                     </>
                 )}
                 <CentralDeck />

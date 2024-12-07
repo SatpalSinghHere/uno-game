@@ -3,9 +3,8 @@ import CardBack from '@/utils/CardBack'
 import { cardList } from '@/utils/cardObjects'
 import React, { useState } from 'react'
 
-const PlayerRight = () => {
-  const [noOfCards, setNoOfCards] = useState(5)
-
+const PlayerRight = ({noOfCards}:{noOfCards : number}) => {
+  
   const array = Array(noOfCards).fill(1)
 
   // console.log(array)
