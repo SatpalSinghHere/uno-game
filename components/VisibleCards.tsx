@@ -21,10 +21,12 @@ const VisibleCards = () => {
   const [cards, setCards] = useState<Card[]>([])
   const centralCardBody = useContext(socketContext)
 
-  if(cards.length == 0){
-    const randomDeck = randomDeckGen(10)
-    setCards(randomDeck)
-  }
+  useEffect(()=>{
+    if(cards.length == 0){
+      const randomDeck = randomDeckGen(10)
+      setCards(randomDeck)
+    }
+  }, [cards])
 
   const useCard = (cardObject: Card) => {
     if (centralCardBody?.centralCard.color === cardObject.color || centralCardBody?.centralCard.value === cardObject.value) {
