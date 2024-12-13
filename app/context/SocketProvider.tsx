@@ -37,10 +37,17 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
     //emitters
     const emitStartGame = useCallback(() => {
-        console.log("function call emit start game")
+        
         if(socket){
             console.log("Emitting Start game")
-            socket.emit('Start Game', "starting game")
+            const alphabet = 'abcdefghijklmnopqrstuvwxyz'
+            let roomId = ''
+            for(let i = 0; i<10; i++){
+                roomId += alphabet[Math.floor(Math.random() * alphabet.length)]
+            }
+            console.log('Room ID', roomId)
+            socket.emit('Start Game', roomId)
+            
         }
     }, [socket])
 
@@ -58,13 +65,18 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         })
         _socket.on('New Central Card', recNewCentralCard)
         _socket.on('Online Players', newOnlinePlayers)
-        _socket.on('Start Game', () => {
-            redirect('/game')
+        _socket.on('Start Game', (roomId) => {
+            _socket.emit('join room', roomId)
+            redirect(`/game/${roomId}`)
+            
         })
         setSocket(_socket)
 
         return () => {
             _socket.off('New Central Card', recNewCentralCard)
+            _socket.off('Online Players', newOnlinePlayers)
+            _socket.off('Start Game')
+            _socket.disconnect()
         }
     },[])
 

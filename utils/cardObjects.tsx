@@ -48,15 +48,15 @@ const red9 : Card = {
 }
 const redSkip : Card = {
     color: red,
-    value: 'Skip'
+    value: 'S'
 }
 const redReverse : Card = {
     color: red,
-    value: 'Reverse'
+    value: 'R'
 }
 const redDraw2 : Card = {
     color: red,
-    value: 'Draw 2'
+    value: '+2'
 }
 const redWild : Card = {
     color: red,
@@ -64,7 +64,7 @@ const redWild : Card = {
 }
 const redWildDraw4 : Card = {
     color: red,
-    value: 'Wild Draw 4'
+    value: '+4'
 }
 
 const blue1 : Card = {
@@ -105,15 +105,15 @@ const blue9 : Card = {
 }
 const blueSkip : Card = {
     color: blue,
-    value: 'Skip'
+    value: 'S'
 }
 const blueReverse : Card = {
     color: blue,
-    value: 'Reverse'
+    value: 'R'
 }
 const blueDraw2 : Card = {
     color: blue,
-    value: 'Draw 2'
+    value: '+2'
 }
 const blueWild : Card = {
     color: blue,
@@ -121,7 +121,7 @@ const blueWild : Card = {
 }
 const blueWildDraw4 : Card = {
     color: blue,
-    value: 'Wild Draw 4'
+    value: '+4'
 }
 
 const green1 : Card = {
@@ -162,15 +162,15 @@ const green9 : Card = {
 }
 const greenSkip : Card = {
     color: green,
-    value: 'Skip'
+    value: 'S'
 }
 const greenReverse : Card = {
     color: green,
-    value: 'Reverse'
+    value: 'R'
 }
 const greenDraw2 : Card = {
     color: green,
-    value: 'Draw 2'
+    value: '+2'
 }
 const greenWild : Card = {
     color: green,
@@ -178,7 +178,7 @@ const greenWild : Card = {
 }
 const greenWildDraw4 : Card = {
     color: green,
-    value: 'Wild Draw 4'
+    value: '+4'
 }
 
 const yellow1 : Card = {
@@ -219,15 +219,15 @@ const yellow9 : Card = {
 }
 const yellowSkip : Card = {
     color: yellow,
-    value: 'Skip'
+    value: 'S'
 }
 const yellowReverse : Card = {
     color: yellow,
-    value: 'Reverse'
+    value: 'R'
 }
 const yellowDraw2 : Card = {
     color: yellow,
-    value: 'Draw 2'
+    value: '+2'
 }
 const yellowWild : Card = {
     color: yellow,
@@ -235,10 +235,10 @@ const yellowWild : Card = {
 }
 const yellowWildDraw4 : Card = {
     color: yellow,
-    value: 'Wild Draw 4'
+    value: '+4'
 }
 
-const cardList = [red1, red2, red3, red4, red5, red6, red7, red8, red9, blue1, blue2, blue3, blue4, blue5, blue6, blue7, blue8, blue9, green1, green2, green3, green4, green5, green6, green7, green8, green9, yellow1, yellow2, yellow3, yellow4, yellow5, yellow6, yellow7, yellow8, yellow9]
+const cardList = [red1, red2, red3, red4, red5, red6, red7, red8, red9, blue1, blue2, blue3, blue4, blue5, blue6, blue7, blue8, blue9, green1, green2, green3, green4, green5, green6, green7, green8, green9, yellow1, yellow2, yellow3, yellow4, yellow5, yellow6, yellow7, yellow8, yellow9, redDraw2, redSkip, redReverse, redWildDraw4, blueDraw2, blueSkip, blueReverse, blueWildDraw4, greenDraw2, greenSkip, greenReverse, greenWildDraw4, yellowDraw2, yellowSkip, yellowReverse, yellowWildDraw4]
 
 export {cardList};
 export {Card};
