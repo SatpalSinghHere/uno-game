@@ -16,6 +16,18 @@ const randomDeckGen = (length: number) => {
   return randomDeck
 }
 
+const sortCards = (deck : Card[]) => {
+  return deck.sort((a, b) => {
+    if (a.color > b.color) {
+      return 1
+    } else if (a.color < b.color) {
+      return -1
+    } else {
+      return a.value > b.value ? 1 : -1
+    }
+  })
+}
+
 const VisibleCards = () => {
 
   const [cards, setCards] = useState<Card[]>([])
@@ -24,6 +36,7 @@ const VisibleCards = () => {
   useEffect(()=>{
     if(cards.length == 0){
       const randomDeck = randomDeckGen(10)
+      sortCards(randomDeck)
       setCards(randomDeck)
     }
   }, [cards])
