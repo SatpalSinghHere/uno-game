@@ -1,4 +1,5 @@
 'use client'
+import { signIn } from 'next-auth/react'
 import React from 'react'
 
 const Navbar = () => {
@@ -13,7 +14,7 @@ const Navbar = () => {
       </div>
       </div>
       <div className='flex '>
-        <div className='p-2 hover:text-white hover:cursor-pointer'>
+        <div className='p-2 hover:text-white hover:cursor-pointer' onClick={() => signIn("google")}>
           Sign in 
         </div>
         <div className='p-2 hover:text-white hover:cursor-pointer'>
