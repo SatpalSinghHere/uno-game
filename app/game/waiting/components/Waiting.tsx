@@ -1,6 +1,6 @@
 
 import React, { useContext, useState } from 'react'
-import { socketContext } from '../../context/SocketProvider'
+import { socketContext } from '../../../context/SocketProvider'
 import { redirect } from 'next/navigation'
 
 const Waiting = () => {
