@@ -6,6 +6,7 @@ import { centralCardContext, CentralCardContext } from './centralCard'
 import { io, Socket } from 'socket.io-client'
 import { redirect } from 'next/navigation'
 import { randomDeckGen } from '@/utils/cardGen'
+import { useSession } from 'next-auth/react'
 
 interface SocketProviderProps {
     children: React.ReactNode
@@ -59,6 +60,9 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         }
     }, [socket])
 
+    const session = useSession()
+    console.log(session)
+
     useEffect(()=>{
         const _socket = io('http://localhost:8000')
         _socket.on('connect', () => {
@@ -67,10 +71,12 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         _socket.on('New Central Card', recNewCentralCard)
         _socket.on('Online Players', newOnlinePlayers)
         _socket.on('Start Game', (roomId) => {
-
+            
+            const user = session?.data?.user
             const deck = randomDeckGen(10)
+            console.log(user, deck)
 
-            _socket.emit('join room', roomId, deck)
+            _socket.emit('join room', roomId, user?.name, user?.email, deck)
             redirect(`/game/${roomId}`)
             
         })
