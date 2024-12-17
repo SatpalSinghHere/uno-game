@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useState, createContext } from 'react'
 import { centralCardContext, CentralCardContext } from './centralCard'
 import { io, Socket } from 'socket.io-client'
 import { redirect } from 'next/navigation'
+import { randomDeckGen } from '@/utils/cardGen'
 
 interface SocketProviderProps {
     children: React.ReactNode
@@ -66,7 +67,10 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         _socket.on('New Central Card', recNewCentralCard)
         _socket.on('Online Players', newOnlinePlayers)
         _socket.on('Start Game', (roomId) => {
-            _socket.emit('join room', roomId)
+
+            const deck = randomDeckGen(10)
+
+            _socket.emit('join room', roomId, deck)
             redirect(`/game/${roomId}`)
             
         })
