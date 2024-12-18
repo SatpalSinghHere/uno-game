@@ -13,10 +13,11 @@ interface SocketProviderProps {
 }
 
 export interface SocketContext {
-    playersOnline : string[]
-    centralCard : Card,
-    emitNewCentralCard : (card: Card) => void
-    emitStartGame : () => void
+    playersOnline: string[]
+    centralCard: Card,
+    emitNewCentralCard: (card: Card) => void
+    emitStartGame: () => void
+    reqJoinRoom: (roomId: string, username: string, userEmail: string, deck: Card[]) => void
 }
 
 export const socketContext = createContext<SocketContext | undefined>(undefined);
@@ -24,7 +25,7 @@ export const socketContext = createContext<SocketContext | undefined>(undefined)
 const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
     const [playersOnline, setPlayersOnline] = useState<string[]>([])
-    const newOnlinePlayers = useCallback((players: string[])=>{
+    const newOnlinePlayers = useCallback((players: string[]) => {
         setPlayersOnline(players)
     }, [])
 
@@ -39,31 +40,36 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
     //emitters
     const emitStartGame = useCallback(() => {
-        
-        if(socket){
+
+        if (socket) {
             console.log("Emitting Start game")
             const alphabet = 'abcdefghijklmnopqrstuvwxyz'
             let roomId = ''
-            for(let i = 0; i<10; i++){
+            for (let i = 0; i < 10; i++) {
                 roomId += alphabet[Math.floor(Math.random() * alphabet.length)]
             }
             console.log('Room ID', roomId)
             socket.emit('Start Game', roomId)
-            
+
         }
     }, [socket])
 
-    const emitNewCentralCard: SocketContext['emitNewCentralCard'] = useCallback((card: Card)=>{
+    const reqJoinRoom = useCallback((roomId: string, username: string, userEmail: string, deck: Card[]) => {
         if(socket){
+            socket.emit('join room', roomId, username, userEmail, deck)
+        }
+    }, [socket])
+
+    const emitNewCentralCard: SocketContext['emitNewCentralCard'] = useCallback((card: Card) => {
+        if (socket) {
             console.log("Emitting new central card ", card)
             socket.emit('New Central Card', JSON.stringify(card))
         }
     }, [socket])
 
-    const session = useSession()
-    console.log(session)
+    
 
-    useEffect(()=>{
+    useEffect(() => {
         const _socket = io('http://localhost:8000')
         _socket.on('connect', () => {
             console.log('connected to socket')
@@ -72,13 +78,16 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         _socket.on('Online Players', newOnlinePlayers)
         _socket.on('Start Game', (roomId) => {
             
-            const user = session?.data?.user
-            const deck = randomDeckGen(10)
-            console.log(user, deck)
-
-            _socket.emit('join room', roomId, user?.name, user?.email, deck)
             redirect(`/game/${roomId}`)
-            
+            // if (session) {
+            //     const user = session?.user
+            //     const deck = randomDeckGen(10)
+            //     console.log('user information : ', user, deck)
+
+            //     _socket.emit('join room', roomId, user?.name, user?.email, deck)
+                
+            // }
+
         })
         setSocket(_socket)
 
@@ -88,10 +97,10 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
             _socket.off('Start Game')
             _socket.disconnect()
         }
-    },[])
+    }, [])
 
     return (
-        <socketContext.Provider value={{playersOnline, centralCard, emitNewCentralCard, emitStartGame}}>
+        <socketContext.Provider value={{ playersOnline, centralCard, emitNewCentralCard, emitStartGame, reqJoinRoom }}>
             {children}
         </socketContext.Provider>
     )
