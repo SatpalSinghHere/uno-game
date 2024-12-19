@@ -67,15 +67,27 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         }
     }, [socket])
 
+    const {data: session} = useSession()
+
+    useEffect(()=>{
+        if(session){
+            const user = session.user
+            
+            console.log('Inside waiting room')
+
+            socket?.emit('coming to waiting room', user?.name)
+        }
+    },[session])
+
     
 
     useEffect(() => {
         const _socket = io('http://localhost:8000')
         _socket.on('connect', () => {
-            console.log('connected to socket')
+            console.log('connect to socket')
         })
         _socket.on('New Central Card', recNewCentralCard)
-        _socket.on('Online Players', newOnlinePlayers)
+        _socket.on('players waiting', newOnlinePlayers)
         _socket.on('Start Game', (roomId) => {
             
             redirect(`/game/${roomId}`)

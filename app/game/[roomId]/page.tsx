@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useContext, useEffect } from 'react'
-import PlayGround from '../components/PlayGround'
+import PlayGround from '../../../components/PlayGround'
 // import { useRouter } from 'next/compat/router'
 import { useSession } from 'next-auth/react'
 import { socketContext } from '@/app/context/SocketProvider'

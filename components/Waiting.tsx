@@ -1,6 +1,6 @@
 'use client'
 import React, { useContext, useState } from 'react'
-import { socketContext } from '../../../context/SocketProvider'
+import { socketContext } from '../app/context/SocketProvider'
 import { redirect } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 
@@ -10,7 +10,7 @@ const Waiting = () => {
     const SocketContext = useContext(socketContext)
     const players = SocketContext?.playersOnline
     const emitStartGame = SocketContext?.emitStartGame
-    console.log("Players Online", SocketContext?.playersOnline)
+    console.log("Players Waiting", SocketContext?.playersOnline)
 
     
     
