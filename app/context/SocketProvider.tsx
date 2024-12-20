@@ -17,7 +17,8 @@ export interface SocketContext {
     centralCard: Card,
     emitNewCentralCard: (card: Card) => void
     emitStartGame: () => void
-    reqJoinRoom: (roomId: string, username: string, userEmail: string, deck: Card[]) => void
+    reqJoinRoom: (roomId: string, username: string, userEmail: string, deck: Card[]) => void,
+    insideWaitingRoom : (playername: string, roomId: string)=> void
 }
 
 export const socketContext = createContext<SocketContext | undefined>(undefined);
@@ -54,6 +55,13 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         }
     }, [socket])
 
+    const insideWaitingRoom = useCallback((playername : string, roomId : string)=>{
+        if(socket){
+            console.log('Inside waiting room', roomId)
+            socket.emit('coming to waiting room', playername, roomId)
+        }
+    }, [socket])
+
     const reqJoinRoom = useCallback((roomId: string, username: string, userEmail: string, deck: Card[]) => {
         if(socket){
             socket.emit('join room', roomId, username, userEmail, deck)
@@ -67,20 +75,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         }
     }, [socket])
 
-    const {data: session} = useSession()
-
-    useEffect(()=>{
-        if(session){
-            const user = session.user
-            
-            console.log('Inside waiting room')
-
-            socket?.emit('coming to waiting room', user?.name)
-        }
-    },[session])
-
     
-
     useEffect(() => {
         const _socket = io('http://localhost:8000')
         _socket.on('connect', () => {
@@ -112,7 +107,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     }, [])
 
     return (
-        <socketContext.Provider value={{ playersOnline, centralCard, emitNewCentralCard, emitStartGame, reqJoinRoom }}>
+        <socketContext.Provider value={{ playersOnline, centralCard, emitNewCentralCard, emitStartGame, reqJoinRoom, insideWaitingRoom }}>
             {children}
         </socketContext.Provider>
     )
