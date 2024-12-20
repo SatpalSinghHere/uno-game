@@ -10,7 +10,7 @@ import { randomDeckGen, sortCards } from '@/utils/cardGen';
 
 
 
-const VisibleCards = () => {
+const VisibleCards = ({deck} : {deck : Card[]}) => {
 
   const [cards, setCards] = useState<Card[]>([])
   const centralCardBody = useContext(socketContext)
@@ -37,7 +37,7 @@ const VisibleCards = () => {
 
     <div className='absolute bottom-[5%] w-2/5 h-36 left-1/2 translate-x-[-50%]'>
 
-      {cards.map((cardObject, index) => {
+      {deck.map((cardObject, index) => {
         // const translateX = (index + 1 - midIndex) * 28;
 
 

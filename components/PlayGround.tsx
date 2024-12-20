@@ -18,9 +18,21 @@ const PlayGround = () => {
     const SocketContext = useContext(socketContext)
     const gameState = SocketContext?.gameState
 
-    const players = gameState?.players.length as number
-    console.log('Number of players', players)
+    const players : any[] | undefined = gameState?.players
+    console.log('Number of players', players?.length, players)
+    let whoseTurn, thisplayer
+    useEffect(()=>{
+        if(players && gameState){
+            whoseTurn = players[gameState['whoseTurn'] as number]
+            thisplayer = players.find(player => player.socketId === SocketContext.socketId)
+            console.log('THIS PLAYER', thisplayer, SocketContext.socketId)
+        }
+    }, [SocketContext])
+    
 
+
+
+    
     return (
         <div>
             <div className="absolute w-full h-full items-center bg-red-950">
@@ -31,14 +43,14 @@ const PlayGround = () => {
                     <option value="4">4</option>
                 </select> */}
                 
-                {players === 2 && <PlayerTop noOfCards={10} />}
-                {players === 3 && (
+                {players?.length === 2 && <PlayerTop noOfCards={10} />}
+                {players?.length === 3 && (
                     <>
                         <PlayerLeft noOfCards={10} />
                         <PlayerRight noOfCards={10} />
                     </>
                 )}
-                {players === 4 && (
+                {players?.length === 4 && (
                     <>
                         <PlayerLeft noOfCards={10} />
                         <PlayerRight noOfCards={10} />
@@ -46,7 +58,7 @@ const PlayGround = () => {
                     </>
                 )}
                 <CentralDeck />
-                <VisibleCards />
+                {/* <VisibleCards  /> */}
             </div>
         </div>
     )

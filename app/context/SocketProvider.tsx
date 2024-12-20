@@ -21,12 +21,13 @@ interface gameState {
 }
 
 export interface SocketContext {
+    socketId: string,
     playersOnline: string[]
     gameState: gameState | null,
     emitNewCentralCard: (card: Card) => void
-    emitStartGame: (roomId : string) => void
+    emitStartGame: (roomId: string) => void
     reqJoinRoom: (roomId: string, username: string, userEmail: string, deck: Card[]) => void,
-    insideWaitingRoom : (playername: string, roomId: string)=> void
+    insideWaitingRoom: (playername: string, roomId: string) => void
 }
 
 export const socketContext = createContext<SocketContext | undefined>(undefined);
@@ -39,13 +40,14 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     }, [])
 
     const [gameState, setGameState] = useState<gameState | null>(null)
-    const recNewGameState = useCallback((gameState : gameState) => {
-        
+    const recNewGameState = useCallback((gameState: gameState) => {
+
         console.log('Receiving new game state', gameState)
         setGameState(gameState)
     }, [])
 
     const [socket, setSocket] = useState<Socket>()
+    const [socketId, setSocketId] = useState<string>('')
 
     //emitters
     const emitStartGame = useCallback((roomId: string) => {
@@ -57,15 +59,15 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         }
     }, [socket])
 
-    const insideWaitingRoom = useCallback((playername : string, roomId : string)=>{
-        if(socket){
+    const insideWaitingRoom = useCallback((playername: string, roomId: string) => {
+        if (socket) {
             console.log('Inside waiting room', roomId)
             socket.emit('coming to waiting room', playername, roomId)
         }
     }, [socket])
 
     const reqJoinRoom = useCallback((roomId: string, username: string, userEmail: string, deck: Card[]) => {
-        if(socket){
+        if (socket) {
             socket.emit('join room', roomId, username, userEmail, deck)
         }
     }, [socket])
@@ -77,16 +79,18 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         }
     }, [socket])
 
-    
+
     useEffect(() => {
         const _socket = io('http://localhost:8000')
         _socket.on('connect', () => {
             console.log('connect to socket')
+            setSocketId(_socket.id as string)
+            console.log('SOCKET ID ----> ', _socket.id)
         })
         _socket.on('new game state', recNewGameState)
         _socket.on('players waiting', newOnlinePlayers)
         _socket.on('Start Game', (roomId) => {
-            
+
             redirect(`/game/${roomId}`)
             // if (session) {
             //     const user = session?.user
@@ -94,11 +98,12 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
             //     console.log('user information : ', user, deck)
 
             //     _socket.emit('join room', roomId, user?.name, user?.email, deck)
-                
+
             // }
 
         })
         setSocket(_socket)
+
 
         return () => {
             _socket.off('new game state', recNewGameState)
@@ -109,7 +114,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     }, [])
 
     return (
-        <socketContext.Provider value={{ playersOnline, gameState, emitNewCentralCard, emitStartGame, reqJoinRoom, insideWaitingRoom }}>
+        <socketContext.Provider value={{ socketId, playersOnline, gameState, emitNewCentralCard, emitStartGame, reqJoinRoom, insideWaitingRoom }}>
             {children}
         </socketContext.Provider>
     )
