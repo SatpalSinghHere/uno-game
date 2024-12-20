@@ -16,7 +16,9 @@ const PlayGround = () => {
     //     }
     // }, [SocketContext])
     const SocketContext = useContext(socketContext)
-    const players = SocketContext?.playersOnline.length as number
+    const gameState = SocketContext?.gameState
+
+    const players = gameState?.players.length as number
     console.log('Number of players', players)
 
     return (

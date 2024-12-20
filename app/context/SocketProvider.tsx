@@ -12,11 +12,19 @@ interface SocketProviderProps {
     children: React.ReactNode
 }
 
+interface gameState {
+    roomId: string,
+    clockwise: boolean,
+    whoseTurn: Number,
+    discardCard: Card,
+    players: Array<any>
+}
+
 export interface SocketContext {
     playersOnline: string[]
-    centralCard: Card,
+    gameState: gameState | null,
     emitNewCentralCard: (card: Card) => void
-    emitStartGame: () => void
+    emitStartGame: (roomId : string) => void
     reqJoinRoom: (roomId: string, username: string, userEmail: string, deck: Card[]) => void,
     insideWaitingRoom : (playername: string, roomId: string)=> void
 }
@@ -30,26 +38,20 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         setPlayersOnline(players)
     }, [])
 
-    const [centralCard, setCentralCard] = useState(cardList[cardList.length - 1])
-    const recNewCentralCard = useCallback((str: string) => {
-        const card = JSON.parse(str)
-        console.log('Receiving new central Card', card)
-        setCentralCard(card)
+    const [gameState, setGameState] = useState<gameState | null>(null)
+    const recNewGameState = useCallback((gameState : gameState) => {
+        
+        console.log('Receiving new game state', gameState)
+        setGameState(gameState)
     }, [])
 
     const [socket, setSocket] = useState<Socket>()
 
     //emitters
-    const emitStartGame = useCallback(() => {
+    const emitStartGame = useCallback((roomId: string) => {
 
         if (socket) {
-            console.log("Emitting Start game")
-            const alphabet = 'abcdefghijklmnopqrstuvwxyz'
-            let roomId = ''
-            for (let i = 0; i < 10; i++) {
-                roomId += alphabet[Math.floor(Math.random() * alphabet.length)]
-            }
-            console.log('Room ID', roomId)
+            console.log('Emitting start game', roomId)
             socket.emit('Start Game', roomId)
 
         }
@@ -81,7 +83,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         _socket.on('connect', () => {
             console.log('connect to socket')
         })
-        _socket.on('New Central Card', recNewCentralCard)
+        _socket.on('new game state', recNewGameState)
         _socket.on('players waiting', newOnlinePlayers)
         _socket.on('Start Game', (roomId) => {
             
@@ -99,7 +101,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         setSocket(_socket)
 
         return () => {
-            _socket.off('New Central Card', recNewCentralCard)
+            _socket.off('new game state', recNewGameState)
             _socket.off('Online Players', newOnlinePlayers)
             _socket.off('Start Game')
             _socket.disconnect()
@@ -107,7 +109,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     }, [])
 
     return (
-        <socketContext.Provider value={{ playersOnline, centralCard, emitNewCentralCard, emitStartGame, reqJoinRoom, insideWaitingRoom }}>
+        <socketContext.Provider value={{ playersOnline, gameState, emitNewCentralCard, emitStartGame, reqJoinRoom, insideWaitingRoom }}>
             {children}
         </socketContext.Provider>
     )

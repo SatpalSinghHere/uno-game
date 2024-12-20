@@ -30,7 +30,7 @@ const Waiting = () => {
             {players?.map((player,index) => {
                 return <li key={index}>{player}</li>
             })}
-            <button onClick={emitStartGame}>Start Game</button>
+            <button onClick={()=>{if(emitStartGame){emitStartGame(roomId)}}}>Start Game</button>
         </div>
     )
 }
