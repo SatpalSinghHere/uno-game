@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useState, createContext } from 'react'
 import { centralCardContext, CentralCardContext } from './centralCard'
 import { io, Socket } from 'socket.io-client'
 import { redirect } from 'next/navigation'
-import { randomDeckGen } from '@/utils/cardGen'
+import { randomDeckGen, randomString } from '@/utils/cardGen'
 import { useSession } from 'next-auth/react'
 
 interface SocketProviderProps {
@@ -50,8 +50,8 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     const [socketId, setSocketId] = useState<string>('')
 
     //emitters
-    const emitStartGame = useCallback((roomId: string) => {
-
+    const emitStartGame = useCallback(() => {
+        const roomId = randomString()
         if (socket) {
             console.log('Emitting start game', roomId)
             socket.emit('Start Game', roomId)
@@ -79,6 +79,18 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         }
     }, [socket])
 
+    const handleNewGameState = useCallback((gameState : gameState)=>{
+        setGameState(gameState)
+    }, [])
+
+    const emitNewGameState = useCallback((newDiscardCard: Card)=>{
+        let thisGameState = gameState
+        if(thisGameState && socket){
+            thisGameState.discardCard = newDiscardCard 
+            socket.emit('new game state', thisGameState)
+        }
+    }, [socket])
+
 
     useEffect(() => {
         const _socket = io('http://localhost:8000')
@@ -89,18 +101,9 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         })
         _socket.on('new game state', recNewGameState)
         _socket.on('players waiting', newOnlinePlayers)
+        _socket.on('new game state', handleNewGameState)
         _socket.on('Start Game', (roomId) => {
-
-            redirect(`/game/${roomId}`)
-            // if (session) {
-            //     const user = session?.user
-            //     const deck = randomDeckGen(10)
-            //     console.log('user information : ', user, deck)
-
-            //     _socket.emit('join room', roomId, user?.name, user?.email, deck)
-
-            // }
-
+            redirect(`/game/${roomId}`)            
         })
         setSocket(_socket)
 

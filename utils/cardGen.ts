@@ -20,3 +20,12 @@ export const sortCards = (deck : Card[]) => {
       }
     })
   }
+
+  export const randomString = () => {
+    const alphabet = 'abcdefghijklmnopqrstuvwxyz'
+    let randomString = ''
+    for (let i = 0; i < 10; i++) {
+      randomString += alphabet[Math.floor(Math.random() * alphabet.length)]
+    }
+    return randomString
+  }

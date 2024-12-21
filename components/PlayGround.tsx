@@ -17,8 +17,8 @@ const PlayGround = () => {
     // }, [SocketContext])
     const SocketContext = useContext(socketContext)
     const gameState = SocketContext?.gameState
-
-    const players : any[] | undefined = gameState?.players
+    
+    const players = gameState?.players
     console.log('Number of players', players?.length, players)
     let whoseTurn, thisplayer
     useEffect(()=>{
