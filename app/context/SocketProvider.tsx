@@ -86,7 +86,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     const emitNewGameState = useCallback((newGameState : gameState)=>{
         
         if(socket){
-            socket.emit('new game state', newGameState)
+            socket.emit('new game state', newGameState, newGameState.roomId)
         }
     }, [socket])
 

@@ -7,13 +7,18 @@ import { Card, cardList } from '@/utils/cardObjects';
 
 import { socketContext } from '@/app/context/SocketProvider';
 import { randomDeckGen, sortCards } from '@/utils/cardGen';
+import { thisPlayerContext } from './PlayGround';
 
 
 
 const VisibleCards = ({ deck }: { deck: Card[] }) => {
 
   const [cards, setCards] = useState<Card[]>([])
+
   const SocketContext = useContext(socketContext)
+  const ThisPlayerContext = useContext(thisPlayerContext)
+  const thisPLayerEmail = ThisPlayerContext.playerEmail
+
   const gameState = SocketContext?.gameState
   const discardCard = gameState?.discardCard
 
@@ -29,7 +34,9 @@ const VisibleCards = ({ deck }: { deck: Card[] }) => {
   const useCard = (cardObject: Card) => {
     if (discardCard?.color === cardObject.color || discardCard?.value === cardObject.value) {
       
-      if (gameState) {
+      if (gameState?.players[0]) {
+        let players = gameState.players
+        let thisPlayer = players.find(player => player?.email === ThisPlayerContext.playerEmail)
         gameState.discardCard = cardObject
         if (gameState.clockwise) {
           gameState.whoseTurn = (gameState.whoseTurn as number + 1) % gameState.players.length
@@ -38,7 +45,13 @@ const VisibleCards = ({ deck }: { deck: Card[] }) => {
           gameState.whoseTurn = (gameState.whoseTurn as number - 1 + gameState.players.length) % gameState.players.length
         }
 
-        
+        gameState.players = players.map(player => {
+          if (player.email === ThisPlayerContext.playerEmail) {
+            player.deck = player.deck.filter((deckCard: Card)  => deckCard !== cardObject)
+          }
+        })
+
+        SocketContext?.emitNewGameState(gameState)
       }
 
     }
@@ -73,7 +86,7 @@ const VisibleCards = ({ deck }: { deck: Card[] }) => {
         // );
 
         return (
-          <div key={index} className={'h-full w-auto absolute hover:z-[100]'} style={styles} onClick={() => { }}>
+          <div key={index} className={'h-full w-auto absolute hover:z-[100]'} style={styles} onClick={() => {useCard(cardObject) }}>
             <CardTemplate
 
               className={' h-full w-auto bg-white rounded-lg hover:translate-y-[-8px] hover:scale-125  duration-75 cursor-pointer'}

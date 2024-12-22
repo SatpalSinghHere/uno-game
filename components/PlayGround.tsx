@@ -6,42 +6,58 @@ import PlayerTop from '@/components/PlayerTop';
 import UsedCards from '@/components/UsedCards';
 import VisibleCards from '@/components/VisibleCards';
 import { sortCards } from '@/utils/cardGen';
-import React, { useContext, useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react';
+import React, { createContext, useContext, useEffect, useState } from 'react'
+
+interface thisPlayerContextType {
+    playerName: string,
+    playerEmail: string,
+}
+
+export const thisPlayerContext = createContext<thisPlayerContextType>({ playerName: '', playerEmail: '' })
 
 const PlayGround = () => {
+    const {data: session} = useSession()
+    
     const SocketContext = useContext(socketContext)
     const gameState = SocketContext?.gameState
+    console.log('GAME STATE',gameState)
 
     const players = gameState?.players
     console.log('Number of players', players?.length, players)
     let whoseTurn, thisplayer, deck, nextCardCount, nextNextCardCount, nextNextNextCardCount
 
-    if (players && gameState) {
+    if (players && gameState && session) {
         whoseTurn = players[gameState.whoseTurn as number]
-        thisplayer = players.find(player => player.socketId === SocketContext.socketId)
+        thisplayer = players.find(player => player['email'] === session.user?.email)
+        players.forEach(player => {
+            console.log('PLAYER', player)
+        })
         console.log('THIS PLAYER', thisplayer)
         console.log('WHOSE TURN', whoseTurn)
-        console.log('DECK', thisplayer.deck)
+        console.log('DECK', thisplayer?.deck)
 
-        deck = thisplayer.deck
-        sortCards(deck)
 
-        let thisPLayerIndex=0
-        for(thisPLayerIndex=0; thisPLayerIndex< players.length; thisPLayerIndex++){
-            if(players[thisPLayerIndex].socketId === SocketContext.socketId){
-                break
+        deck = thisplayer?.deck as Array<any>
+        if (deck) {
+            sortCards(deck)
+
+            let thisPLayerIndex = 0
+            for (thisPLayerIndex = 0; thisPLayerIndex < players.length; thisPLayerIndex++) {
+                if (players[thisPLayerIndex].socketId === SocketContext.socketId) {
+                    break
+                }
             }
+
+            nextCardCount = players[(thisPLayerIndex + 1) % players.length].deck.length
+            nextNextCardCount = players[(thisPLayerIndex + 2) % players.length].deck.length
+            nextNextNextCardCount = players[(thisPLayerIndex + 3) % players.length].deck.length
+
         }
-
-        nextCardCount = players[(thisPLayerIndex + 1)% players.length].deck.length
-        nextNextCardCount = players[(thisPLayerIndex + 2)% players.length].deck.length
-        nextNextNextCardCount = players[(thisPLayerIndex + 3)% players.length].deck.length
-
-        
     }
 
-    return (
-        <div>
+    return session && (
+        <thisPlayerContext.Provider value={{ playerName: session?.user?.name as string, playerEmail: session?.user?.email as string }}>
             <div className="absolute w-full h-full items-center bg-red-950">
 
                 {/* <select onChange={handlePlayerChange} value={players}>
@@ -65,9 +81,9 @@ const PlayGround = () => {
                     </>
                 )}
                 <CentralDeck />
-                { deck && <VisibleCards deck={deck}  />}
+                {deck && <VisibleCards deck={deck} />}
             </div>
-        </div>
+        </thisPlayerContext.Provider>
     )
 }
 
