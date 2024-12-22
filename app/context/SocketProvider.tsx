@@ -50,8 +50,8 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     const [socketId, setSocketId] = useState<string>('')
 
     //emitters
-    const emitStartGame = useCallback(() => {
-        const roomId = randomString()
+    const emitStartGame = useCallback((roomId: string) => {
+        // const roomId = randomString()
         if (socket) {
             console.log('Emitting start game', roomId)
             socket.emit('Start Game', roomId)

@@ -12,7 +12,8 @@ const CentralDeck = () => {
     color: 'red',
     value: '1'
   }
-  const centralCard = useContext(socketContext)?.centralCard
+  const gameState = useContext(socketContext)?.gameState
+  const centralCard = gameState?.discardCard
   
   
   return (
