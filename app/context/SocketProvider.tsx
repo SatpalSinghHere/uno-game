@@ -24,7 +24,7 @@ export interface SocketContext {
     socketId: string,
     playersOnline: string[]
     gameState: gameState | null,
-    emitNewCentralCard: (card: Card) => void
+    emitNewGameState: (newGameState: gameState) => void
     emitStartGame: (roomId: string) => void
     reqJoinRoom: (roomId: string, username: string, userEmail: string, deck: Card[]) => void,
     insideWaitingRoom: (playername: string, roomId: string) => void
@@ -72,22 +72,21 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         }
     }, [socket])
 
-    const emitNewCentralCard: SocketContext['emitNewCentralCard'] = useCallback((card: Card) => {
-        if (socket) {
-            console.log("Emitting new central card ", card)
-            socket.emit('New Central Card', JSON.stringify(card))
-        }
-    }, [socket])
+    // const emitNewCentralCard: SocketContext['emitNewGameState'] = useCallback((card: Card) => {
+    //     if (socket) {
+    //         console.log("Emitting new central card ", card)
+    //         socket.emit('New Central Card', JSON.stringify(card))
+    //     }
+    // }, [socket])
 
     const handleNewGameState = useCallback((gameState : gameState)=>{
         setGameState(gameState)
     }, [])
 
-    const emitNewGameState = useCallback((newDiscardCard: Card)=>{
-        let thisGameState = gameState
-        if(thisGameState && socket){
-            thisGameState.discardCard = newDiscardCard 
-            socket.emit('new game state', thisGameState)
+    const emitNewGameState = useCallback((newGameState : gameState)=>{
+        
+        if(socket){
+            socket.emit('new game state', newGameState)
         }
     }, [socket])
 
@@ -117,7 +116,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     }, [])
 
     return (
-        <socketContext.Provider value={{ socketId, playersOnline, gameState, emitNewCentralCard, emitStartGame, reqJoinRoom, insideWaitingRoom }}>
+        <socketContext.Provider value={{ socketId, playersOnline, gameState, emitNewGameState, emitStartGame, reqJoinRoom, insideWaitingRoom }}>
             {children}
         </socketContext.Provider>
     )

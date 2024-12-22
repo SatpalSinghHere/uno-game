@@ -5,60 +5,67 @@ import PlayerRight from '@/components/PlayerRight';
 import PlayerTop from '@/components/PlayerTop';
 import UsedCards from '@/components/UsedCards';
 import VisibleCards from '@/components/VisibleCards';
+import { sortCards } from '@/utils/cardGen';
 import React, { useContext, useEffect, useState } from 'react'
 
 const PlayGround = () => {
-    // const [players, setPlayers] = useState<number>(2);
-
-    // useEffect(() => {
-    //     if (SocketContext) {
-    //         setPlayers(SocketContext.playersOnline.length as number)
-    //     }
-    // }, [SocketContext])
     const SocketContext = useContext(socketContext)
     const gameState = SocketContext?.gameState
-    
+
     const players = gameState?.players
     console.log('Number of players', players?.length, players)
-    let whoseTurn, thisplayer
-    useEffect(()=>{
-        if(players && gameState){
-            whoseTurn = players[gameState['whoseTurn'] as number]
-            thisplayer = players.find(player => player.socketId === SocketContext.socketId)
-            console.log('THIS PLAYER', thisplayer, SocketContext.socketId)
+    let whoseTurn, thisplayer, deck, nextCardCount, nextNextCardCount, nextNextNextCardCount
+
+    if (players && gameState) {
+        whoseTurn = players[gameState.whoseTurn as number]
+        thisplayer = players.find(player => player.socketId === SocketContext.socketId)
+        console.log('THIS PLAYER', thisplayer)
+        console.log('WHOSE TURN', whoseTurn)
+        console.log('DECK', thisplayer.deck)
+
+        deck = thisplayer.deck
+        sortCards(deck)
+
+        let thisPLayerIndex=0
+        for(thisPLayerIndex=0; thisPLayerIndex< players.length; thisPLayerIndex++){
+            if(players[thisPLayerIndex].socketId === SocketContext.socketId){
+                break
+            }
         }
-    }, [SocketContext])
-    
 
+        nextCardCount = players[(thisPLayerIndex + 1)% players.length].deck.length
+        nextNextCardCount = players[(thisPLayerIndex + 2)% players.length].deck.length
+        nextNextNextCardCount = players[(thisPLayerIndex + 3)% players.length].deck.length
 
+        
+    }
 
-    
     return (
         <div>
             <div className="absolute w-full h-full items-center bg-red-950">
-                
+
                 {/* <select onChange={handlePlayerChange} value={players}>
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
                 </select> */}
-                
-                {players?.length === 2 && <PlayerTop noOfCards={10} />}
+
+                {players?.length === 2 && <PlayerTop noOfCards={nextCardCount} />}
                 {players?.length === 3 && (
                     <>
-                        <PlayerLeft noOfCards={10} />
-                        <PlayerRight noOfCards={10} />
+                        <PlayerLeft noOfCards={nextCardCount} />
+                        <PlayerRight noOfCards={nextNextCardCount} />
                     </>
                 )}
                 {players?.length === 4 && (
                     <>
-                        <PlayerLeft noOfCards={10} />
-                        <PlayerRight noOfCards={10} />
-                        <PlayerTop noOfCards={10} />
+                        <PlayerLeft noOfCards={nextCardCount} />
+                        <PlayerRight noOfCards={nextNextCardCount} />
+                        <PlayerTop noOfCards={nextNextNextCardCount} />
                     </>
                 )}
                 <CentralDeck />
-                {/* <VisibleCards  /> */}
+                { deck && <VisibleCards deck={deck}  />}
             </div>
         </div>
     )
