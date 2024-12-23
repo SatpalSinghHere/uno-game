@@ -5,7 +5,7 @@ import CardTemplate from '@/utils/Card';
 
 import { Card, cardList } from '@/utils/cardObjects';
 
-import { socketContext } from '@/app/context/SocketProvider';
+import { GameState, socketContext } from '@/app/context/SocketProvider';
 import { randomDeckGen, sortCards } from '@/utils/cardGen';
 import { thisPlayerContext } from './PlayGround';
 
@@ -19,7 +19,7 @@ const VisibleCards = ({ deck }: { deck: Card[] }) => {
   const ThisPlayerContext = useContext(thisPlayerContext)
   const thisPLayerEmail = ThisPlayerContext.playerEmail
 
-  const gameState = SocketContext?.gameState
+  const gameState : GameState | null | undefined = SocketContext?.gameState
   const discardCard = gameState?.discardCard
 
 
@@ -36,7 +36,7 @@ const VisibleCards = ({ deck }: { deck: Card[] }) => {
       
       if (gameState?.players[0]) {
         let players = gameState.players
-        let thisPlayer = players.find(player => player?.email === ThisPlayerContext.playerEmail)
+        // let thisPlayer = players.find(player => player?.email === ThisPlayerContext.playerEmail)
         gameState.discardCard = cardObject
         if (gameState.clockwise) {
           gameState.whoseTurn = (gameState.whoseTurn as number + 1) % gameState.players.length
@@ -45,12 +45,12 @@ const VisibleCards = ({ deck }: { deck: Card[] }) => {
           gameState.whoseTurn = (gameState.whoseTurn as number - 1 + gameState.players.length) % gameState.players.length
         }
 
-        gameState.players = players.map(player => {
+        gameState.players.forEach((player, index) => {
           if (player.email === ThisPlayerContext.playerEmail) {
-            player.deck = player.deck.filter((deckCard: Card)  => deckCard !== cardObject)
+            gameState.players[index].deck = player.deck.filter((deckCard: Card)  => deckCard !== cardObject)
           }
         })
-
+        console.log('Emitting NEW GAME STATE', gameState)
         SocketContext?.emitNewGameState(gameState)
       }
 

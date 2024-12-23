@@ -17,11 +17,11 @@ interface thisPlayerContextType {
 export const thisPlayerContext = createContext<thisPlayerContextType>({ playerName: '', playerEmail: '' })
 
 const PlayGround = () => {
-    const {data: session} = useSession()
-    
+    const { data: session } = useSession()
+
     const SocketContext = useContext(socketContext)
     const gameState = SocketContext?.gameState
-    console.log('GAME STATE',gameState)
+    console.log('GAME STATE', gameState)
 
     const players = gameState?.players
     console.log('Number of players', players?.length, players)
@@ -29,7 +29,14 @@ const PlayGround = () => {
 
     if (players && gameState && session) {
         whoseTurn = players[gameState.whoseTurn as number]
-        thisplayer = players.find(player => player['email'] === session.user?.email)
+        thisplayer = players.find(player => {
+            if (player) {
+                return player['email'] === session.user?.email
+            }
+            else{
+                return false
+            }
+        })
         players.forEach(player => {
             console.log('PLAYER', player)
         })
@@ -75,13 +82,13 @@ const PlayGround = () => {
                 )}
                 {players?.length === 4 && (
                     <>
-                        <PlayerLeft noOfCards={nextCardCount} />
-                        <PlayerRight noOfCards={nextNextCardCount} />
-                        <PlayerTop noOfCards={nextNextNextCardCount} />
+                        <PlayerLeft noOfCards={nextCardCount} myTurn={thisplayer == whoseTurn}/>
+                        <PlayerRight noOfCards={nextNextCardCount} myTurn={thisplayer == whoseTurn}/>
+                        <PlayerTop noOfCards={nextNextNextCardCount} myTurn={thisplayer == whoseTurn}/>
                     </>
                 )}
                 <CentralDeck />
-                {deck && <VisibleCards deck={deck} />}
+                {deck && <VisibleCards deck={deck} myTurn={thisplayer == whoseTurn} />}
             </div>
         </thisPlayerContext.Provider>
     )

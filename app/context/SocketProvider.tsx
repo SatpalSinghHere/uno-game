@@ -12,7 +12,7 @@ interface SocketProviderProps {
     children: React.ReactNode
 }
 
-interface gameState {
+export interface GameState {
     roomId: string,
     clockwise: boolean,
     whoseTurn: Number,
@@ -23,8 +23,8 @@ interface gameState {
 export interface SocketContext {
     socketId: string,
     playersOnline: string[]
-    gameState: gameState | null,
-    emitNewGameState: (newGameState: gameState) => void
+    gameState: GameState | null,
+    emitNewGameState: (newGameState: GameState) => void
     emitStartGame: (roomId: string) => void
     reqJoinRoom: (roomId: string, username: string, userEmail: string, deck: Card[]) => void,
     insideWaitingRoom: (playername: string, roomId: string) => void
@@ -39,8 +39,8 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         setPlayersOnline(players)
     }, [])
 
-    const [gameState, setGameState] = useState<gameState | null>(null)
-    const recNewGameState = useCallback((gameState: gameState) => {
+    const [gameState, setGameState] = useState<GameState | null>(null)
+    const recNewGameState = useCallback((gameState: GameState) => {
 
         console.log('Receiving new game state', gameState)
         setGameState(gameState)
@@ -78,17 +78,18 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     //         socket.emit('New Central Card', JSON.stringify(card))
     //     }
     // }, [socket])
-
-    const handleNewGameState = useCallback((gameState : gameState)=>{
-        setGameState(gameState)
-    }, [])
-
-    const emitNewGameState = useCallback((newGameState : gameState)=>{
+    const emitNewGameState = useCallback((newGameState : GameState)=>{
         
         if(socket){
             socket.emit('new game state', newGameState, newGameState.roomId)
         }
     }, [socket])
+
+    const handleNewGameState = useCallback((gameState : GameState)=>{
+        console.log('Receiving new game state', gameState)
+        setGameState(gameState)
+    }, [])
+
 
 
     useEffect(() => {
