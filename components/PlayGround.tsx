@@ -25,7 +25,8 @@ const PlayGround = () => {
 
     const players = gameState?.players
     console.log('Number of players', players?.length, players)
-    let whoseTurn, thisplayer, deck, nextCardCount, nextNextCardCount, nextNextNextCardCount
+    let whoseTurn, thisplayer, deck, nextPlayer, nextNextPlayer, nextNextNextPlayer, nextCardCount, nextNextCardCount, nextNextNextCardCount
+    let thisPLayerIndex = 0
 
     if (players && gameState && session) {
         whoseTurn = players[gameState.whoseTurn as number]
@@ -37,6 +38,7 @@ const PlayGround = () => {
                 return false
             }
         })
+        
         players.forEach(player => {
             console.log('PLAYER', player)
         })
@@ -46,15 +48,19 @@ const PlayGround = () => {
 
 
         deck = thisplayer?.deck as Array<any>
+        
         if (deck) {
             sortCards(deck)
 
-            let thisPLayerIndex = 0
             for (thisPLayerIndex = 0; thisPLayerIndex < players.length; thisPLayerIndex++) {
                 if (players[thisPLayerIndex].socketId === SocketContext.socketId) {
                     break
                 }
             }
+
+            nextPlayer = players[(thisPLayerIndex + 1) % players.length]
+            nextNextPlayer = players[(thisPLayerIndex + 2) % players.length]
+            nextNextNextPlayer = players[(thisPLayerIndex + 3) % players.length]
 
             nextCardCount = players[(thisPLayerIndex + 1) % players.length].deck.length
             nextNextCardCount = players[(thisPLayerIndex + 2) % players.length].deck.length
@@ -63,7 +69,7 @@ const PlayGround = () => {
         }
     }
 
-    return session && (
+    return session && players &&(
         <thisPlayerContext.Provider value={{ playerName: session?.user?.name as string, playerEmail: session?.user?.email as string }}>
             <div className="absolute w-full h-full items-center bg-red-950">
 
@@ -73,18 +79,18 @@ const PlayGround = () => {
                     <option value="4">4</option>
                 </select> */}
 
-                {players?.length === 2 && <PlayerTop noOfCards={nextCardCount} myTurn={thisplayer == whoseTurn}/>}
+                {players?.length === 2 && <PlayerTop noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn}/>}
                 {players?.length === 3 && (
                     <>
-                        <PlayerLeft noOfCards={nextCardCount} myTurn={thisplayer == whoseTurn}/>
-                        <PlayerRight noOfCards={nextNextCardCount} myTurn={thisplayer == whoseTurn}/>
+                        <PlayerLeft noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn}/>
+                        <PlayerRight noOfCards={nextNextCardCount} myTurn={nextNextPlayer == whoseTurn}/>
                     </>
                 )}
                 {players?.length === 4 && (
                     <>
-                        <PlayerLeft noOfCards={nextCardCount} myTurn={thisplayer == whoseTurn}/>
-                        <PlayerRight noOfCards={nextNextCardCount} myTurn={thisplayer == whoseTurn}/>
-                        <PlayerTop noOfCards={nextNextNextCardCount} myTurn={thisplayer == whoseTurn}/>
+                        <PlayerLeft noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn}/>
+                        <PlayerRight noOfCards={nextNextCardCount} myTurn={nextNextNextPlayer == whoseTurn}/>
+                        <PlayerTop noOfCards={nextNextNextCardCount} myTurn={nextNextPlayer == whoseTurn}/>
                     </>
                 )}
                 <CentralDeck />

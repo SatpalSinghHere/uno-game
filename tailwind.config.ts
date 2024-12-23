@@ -55,7 +55,10 @@ export default {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
-  		}
+  		},
+		boxShadow : {
+			myTurn : '0px -10px 10px 20px yellow'
+		}
   	}
   },
   plugins: [require("tailwindcss-animate")],

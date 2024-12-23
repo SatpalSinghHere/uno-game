@@ -10,19 +10,30 @@ const PlayerRight = ({noOfCards, myTurn}:{noOfCards : number, myTurn: boolean}) 
   // console.log(array)
 
   return (
-    <div className=' w-28 h-1/2 absolute right-[10%] top-1/2 translate-y-[-50%]'>
+    <div className=' w-28 absolute right-[10%] top-1/2 translate-y-[-50%]'>
       {array.map((_, index)=>{
 
-        const translateY = index * 28
+        const translateX = (index + 1 - ((noOfCards-6)/2)) * 28
+        // const translateY = index * 28
 
-        const styles = {
-          transform: `translateY(-${translateY}px)`,
-          zIndex: index
+        let styles = {
+          transform: `translateX(${translateX}px)`,
+          zIndex: index,
+          boxShadow: 'none',
+          backgroundColor: 'none',
+          rotate: '-90deg'
+        }
+
+        if(myTurn){
+          styles = {
+            ...styles,
+            boxShadow: '0px -10px 10px white'
+          }
         }
 
         return (
-          <div key={index} className='absolute bottom-0' style={styles}>
-            <CardBack className={'w-full h-auto bg-white rounded-lg -rotate-90'}/>
+          <div key={index} className='absolute rounded-lg' style={styles}>
+            <CardBack className={'w-full h-auto bg-white rounded-lg'}/>
           </div>
         )
       })}
