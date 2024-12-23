@@ -81,7 +81,7 @@ const VisibleCards = ({ deck, myTurn }: { deck: Card[], myTurn: boolean }) => {
         if(myTurn){
           styles = {
             ...styles,
-            boxShadow: '0px -10px 10px white',
+            boxShadow: '0px -10px 10px blue',
             
         }}
 
@@ -92,7 +92,7 @@ const VisibleCards = ({ deck, myTurn }: { deck: Card[], myTurn: boolean }) => {
         // );
 
         return (
-          <div key={index} className={'h-full w-auto absolute rounded-lg hover:z-[100]'} style={styles} onClick={() => { useCard(cardObject) }}>
+          <div key={index} className={'h-full w-auto absolute rounded-lg hover:z-[100]'} style={styles} onClick={() => { if(myTurn)useCard(cardObject) }}>
             <CardTemplate
               className={' h-full w-auto bg-white rounded-lg hover:translate-y-[-8px] hover:scale-125  duration-75 cursor-pointer'}
               color={cardObject.color}

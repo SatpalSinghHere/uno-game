@@ -27,7 +27,7 @@ const PlayerRight = ({noOfCards, myTurn}:{noOfCards : number, myTurn: boolean}) 
         if(myTurn){
           styles = {
             ...styles,
-            boxShadow: '0px -10px 10px white'
+            boxShadow: '0px -10px 10px blue'
           }
         }
 
