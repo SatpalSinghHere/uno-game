@@ -59,7 +59,7 @@ const VisibleCards = ({ deck, myTurn }: { deck: Card[], myTurn: boolean }) => {
 
   return (
 
-    <div className={myTurn?'absolute bottom-[5%] h-36 left-1/2 translate-x-[-50%]':'absolute bottom-[5%] h-36 left-1/2 translate-x-[-50%]'}>
+    <div className={'absolute bottom-[5%] h-36 left-1/2 translate-x-[-50%]'}>
 
       {deck && deck.map((cardObject, index) => {
         const translateX = (index + 1 - ((deck.length+4)/2)) * 28;

@@ -7,7 +7,7 @@ const PlayerTop = ({noOfCards, myTurn}:{noOfCards : number, myTurn: boolean}) =>
   const array = Array(noOfCards).fill(1)
 
   return (
-    <div className='absolute top-[5%] w-2/5 h-36 left-1/2 translate-x-[-50%]'>
+    <div className='absolute top-[5%] h-36 left-1/2 translate-x-[-50%]'>
       
       {array.map((_, index) => {
         // const translateX = (index + 1 - midIndex) * 28;
@@ -17,12 +17,22 @@ const PlayerTop = ({noOfCards, myTurn}:{noOfCards : number, myTurn: boolean}) =>
 
         // console.log(cardGap)
         
-        const translateX = index * 28;
+        // const translateX = index * 28;
+        const translateX = (index + 1 - ((array.length-4)/2)) * 28;
 
-        const styles = {
-          transform: `translateX(-${translateX}px)`,
-          zIndex: index
+        let styles = {
+          transform: `translateX(${translateX}px)`,
+          zIndex: index,
+          boxShadow: 'none',
+          backgroundColor: 'none'
         }
+
+        if(myTurn){
+          styles = {
+            ...styles,
+            boxShadow: '0px 10px 10px white',
+            
+        }}
 
         // // Using clsx to conditionally build the class string dynamically
         // const cardClasses = clsx(
@@ -31,7 +41,7 @@ const PlayerTop = ({noOfCards, myTurn}:{noOfCards : number, myTurn: boolean}) =>
         // );
 
         return (
-          <div key={index} className={'h-full w-auto absolute right-0'} style={styles} >
+          <div key={index} className={'h-full w-auto absolute right-0 rounded-lg'} style={styles} >
             <CardBack className={' h-full w-auto bg-white rounded-lg cursor-pointer'}/>
           </div>
         );
