@@ -3,7 +3,7 @@ import CardBack from '@/utils/CardBack'
 import { cardList } from '@/utils/cardObjects'
 import React, { useState } from 'react'
 
-const PlayerRight = ({noOfCards}:{noOfCards : number}) => {
+const PlayerRight = ({noOfCards, myTurn}:{noOfCards : number, myTurn: boolean}) => {
   
   const array = Array(noOfCards).fill(1)
 

@@ -73,11 +73,11 @@ const PlayGround = () => {
                     <option value="4">4</option>
                 </select> */}
 
-                {players?.length === 2 && <PlayerTop noOfCards={nextCardCount} />}
+                {players?.length === 2 && <PlayerTop noOfCards={nextCardCount} myTurn={thisplayer == whoseTurn}/>}
                 {players?.length === 3 && (
                     <>
-                        <PlayerLeft noOfCards={nextCardCount} />
-                        <PlayerRight noOfCards={nextNextCardCount} />
+                        <PlayerLeft noOfCards={nextCardCount} myTurn={thisplayer == whoseTurn}/>
+                        <PlayerRight noOfCards={nextNextCardCount} myTurn={thisplayer == whoseTurn}/>
                     </>
                 )}
                 {players?.length === 4 && (

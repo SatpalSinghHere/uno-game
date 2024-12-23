@@ -11,7 +11,7 @@ import { thisPlayerContext } from './PlayGround';
 
 
 
-const VisibleCards = ({ deck }: { deck: Card[] }) => {
+const VisibleCards = ({ deck, myTurn }: { deck: Card[], myTurn: boolean }) => {
 
   const [cards, setCards] = useState<Card[]>([])
 
