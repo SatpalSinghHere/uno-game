@@ -73,9 +73,16 @@ const VisibleCards = ({ deck, myTurn }: { deck: Card[], myTurn: boolean }) => {
         if(myTurn){
           styles = {
             ...styles,
-            boxShadow: '0px -10px 10px blue',
+            boxShadow: '0px 10px 10px blue',
             
         }}
+
+        if(myTurn && (cardObject.color == discardCard?.color || cardObject.value == discardCard?.value)){
+          styles = {
+            ...styles,
+            transform: `translate(${translateX}px, -20px) `
+          }
+        }
 
         return (
           <div key={index} className={'h-full w-auto absolute rounded-lg hover:z-[100]'} style={styles} onClick={() => { if(myTurn)useCard(cardObject) }}>
