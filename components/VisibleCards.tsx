@@ -17,20 +17,22 @@ const VisibleCards = ({ deck, myTurn }: { deck: Card[], myTurn: boolean }) => {
 
   let gameState: GameState | null | undefined = SocketContext?.gameState
   const discardCard = gameState?.discardCard
+  console.log('COUNTER', gameState?.counter)
+  let hasPlusCard = false
+  if (discardCard?.value === '+2' || discardCard?.value === '+4') {
+    deck.forEach((cardObject) => {
+      if (discardCard?.value === cardObject.value) {
+        hasPlusCard = true
+      }
+    })
 
-  let optionsAvailable = false
-  deck.forEach((cardObject) => {
-    if (discardCard?.color === cardObject.color || discardCard?.value === cardObject.value) {
-      optionsAvailable = true
-    }
-  })
+    if (!hasPlusCard && discardCard && ThisPlayerContext) {
+      if (gameState.counter !== 0 ) {
+        //emit + card not available
+        SocketContext?.emitForNoPlusCard(gameState, ThisPlayerContext.playerEmail)
+      }
 
-  if(!optionsAvailable && discardCard && ThisPlayerContext){
-    if(gameState.counter!== 0 && (discardCard?.value === '+2' || discardCard?.value === '+4')) {
-      //emit +2 card not available
-      SocketContext?.emitForNoPlusCard(ThisPlayerContext.playerEmail)
     }
-    
   }
 
 

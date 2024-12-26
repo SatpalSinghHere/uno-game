@@ -29,7 +29,7 @@ export interface SocketContext {
     emitStartGame: (roomId: string) => void
     reqJoinRoom: (roomId: string, username: string, userEmail: string, deck: Card[]) => void,
     insideWaitingRoom: (playername: string, roomId: string) => void,
-    emitForNoPlusCard : (playerEmail: string)=>void,
+    emitForNoPlusCard : (gameStateData: GameState,playerEmail: string)=>void,
     
 }
 
@@ -75,9 +75,10 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         }
     }, [socket])
 
-    const emitForNoPlusCard = useCallback((playerEmail : string)=>{
+    const emitForNoPlusCard = useCallback((gameStateData: GameState, playerEmail : string)=>{
         if(socket){
-            socket.emit('+ card not available', gameState, playerEmail)
+            console.log('Emitting no plus card', gameStateData,playerEmail)
+            socket.emit('+ card not available', gameStateData, playerEmail)
         }
     }, [socket])
 
