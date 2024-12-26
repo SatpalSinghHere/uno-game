@@ -18,19 +18,19 @@ export interface GameState {
     whoseTurn: Number | undefined,
     discardCard: Card | undefined,
     players: Array<any> | undefined,
-    
+    counter: number
 }
 
 export interface SocketContext {
     socketId: string,
     playersOnline: string[]
     gameState: GameState | null,
-    emitNewGameState: (newGameState: GameState) => void
+    emitNewGameState: (newGameState: GameState, playerEmail: string) => void
     emitStartGame: (roomId: string) => void
     reqJoinRoom: (roomId: string, username: string, userEmail: string, deck: Card[]) => void,
     insideWaitingRoom: (playername: string, roomId: string) => void,
-    emitForPlus2 : (playerEmail: string)=>void,
-    emitForPlus4 : (playerEmail: string)=>void,
+    emitForNoPlusCard : (playerEmail: string)=>void,
+    
 }
 
 export const socketContext = createContext<SocketContext | undefined>(undefined);
@@ -75,15 +75,9 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         }
     }, [socket])
 
-    const emitForPlus2 = useCallback((playerEmail : string)=>{
+    const emitForNoPlusCard = useCallback((playerEmail : string)=>{
         if(socket){
-            socket.emit('+2 card not available', gameState, playerEmail)
-        }
-    }, [socket])
-
-    const emitForPlus4 = useCallback((playerEmail: string)=>{
-        if(socket){
-            socket.emit('+4 card not available', gameState, playerEmail)
+            socket.emit('+ card not available', gameState, playerEmail)
         }
     }, [socket])
 
@@ -93,10 +87,10 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     //         socket.emit('New Central Card', JSON.stringify(card))
     //     }
     // }, [socket])
-    const emitNewGameState = useCallback((newGameState : GameState)=>{
+    const emitNewGameState = useCallback((newGameState : GameState, playerEmail: string)=>{
         
         if(socket){
-            socket.emit('new game state', newGameState, newGameState.roomId)
+            socket.emit('new game state', newGameState, newGameState.roomId, playerEmail)
         }
     }, [socket])
 
@@ -132,7 +126,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     }, [])
 
     return (
-        <socketContext.Provider value={{ socketId, playersOnline, gameState, emitNewGameState, emitStartGame, reqJoinRoom, insideWaitingRoom, emitForPlus2, emitForPlus4 }}>
+        <socketContext.Provider value={{ socketId, playersOnline, gameState, emitNewGameState, emitStartGame, reqJoinRoom, insideWaitingRoom, emitForNoPlusCard }}>
             {children}
         </socketContext.Provider>
     )

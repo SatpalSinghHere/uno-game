@@ -26,14 +26,11 @@ const VisibleCards = ({ deck, myTurn }: { deck: Card[], myTurn: boolean }) => {
   })
 
   if(!optionsAvailable && discardCard && ThisPlayerContext){
-    if(discardCard?.value === '+2') {
+    if(gameState.counter!== 0 && (discardCard?.value === '+2' || discardCard?.value === '+4')) {
       //emit +2 card not available
-      SocketContext?.emitForPlus2(ThisPlayerContext.playerEmail)
+      SocketContext?.emitForNoPlusCard(ThisPlayerContext.playerEmail)
     }
-    if(discardCard?.value === '+4') {
-      //emit +4 card not available
-      SocketContext?.emitForPlus4(ThisPlayerContext.playerEmail)
-    }
+    
   }
 
 
@@ -69,7 +66,7 @@ const VisibleCards = ({ deck, myTurn }: { deck: Card[], myTurn: boolean }) => {
             }
           })
           console.log('Emitting NEW GAME STATE', gameState)
-          SocketContext?.emitNewGameState(gameState)
+          SocketContext?.emitNewGameState(gameState, ThisPlayerContext.playerEmail)
         }
       }
 
