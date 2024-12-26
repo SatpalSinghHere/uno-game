@@ -18,6 +18,25 @@ const VisibleCards = ({ deck, myTurn }: { deck: Card[], myTurn: boolean }) => {
   let gameState: GameState | null | undefined = SocketContext?.gameState
   const discardCard = gameState?.discardCard
 
+  let optionsAvailable = false
+  deck.forEach((cardObject) => {
+    if (discardCard?.color === cardObject.color || discardCard?.value === cardObject.value) {
+      optionsAvailable = true
+    }
+  })
+
+  if(!optionsAvailable && discardCard && ThisPlayerContext){
+    if(discardCard?.value === '+2') {
+      //emit +2 card not available
+      SocketContext?.emitForPlus2(ThisPlayerContext.playerEmail)
+    }
+    if(discardCard?.value === '+4') {
+      //emit +4 card not available
+      SocketContext?.emitForPlus4(ThisPlayerContext.playerEmail)
+    }
+  }
+
+
   const useCard = (cardObject: Card) => {
     if (discardCard?.color === cardObject.color || discardCard?.value === cardObject.value) {
       if (gameState && gameState.players) {

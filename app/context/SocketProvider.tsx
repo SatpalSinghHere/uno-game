@@ -17,7 +17,8 @@ export interface GameState {
     clockwise: boolean | undefined,
     whoseTurn: Number | undefined,
     discardCard: Card | undefined,
-    players: Array<any> | undefined
+    players: Array<any> | undefined,
+    
 }
 
 export interface SocketContext {
@@ -27,7 +28,9 @@ export interface SocketContext {
     emitNewGameState: (newGameState: GameState) => void
     emitStartGame: (roomId: string) => void
     reqJoinRoom: (roomId: string, username: string, userEmail: string, deck: Card[]) => void,
-    insideWaitingRoom: (playername: string, roomId: string) => void
+    insideWaitingRoom: (playername: string, roomId: string) => void,
+    emitForPlus2 : (playerEmail: string)=>void,
+    emitForPlus4 : (playerEmail: string)=>void,
 }
 
 export const socketContext = createContext<SocketContext | undefined>(undefined);
@@ -69,6 +72,18 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     const reqJoinRoom = useCallback((roomId: string, username: string, userEmail: string, deck: Card[]) => {
         if (socket) {
             socket.emit('join room', roomId, username, userEmail, deck)
+        }
+    }, [socket])
+
+    const emitForPlus2 = useCallback((playerEmail : string)=>{
+        if(socket){
+            socket.emit('+2 card not available', gameState, playerEmail)
+        }
+    }, [socket])
+
+    const emitForPlus4 = useCallback((playerEmail: string)=>{
+        if(socket){
+            socket.emit('+4 card not available', gameState, playerEmail)
         }
     }, [socket])
 
@@ -117,7 +132,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     }, [])
 
     return (
-        <socketContext.Provider value={{ socketId, playersOnline, gameState, emitNewGameState, emitStartGame, reqJoinRoom, insideWaitingRoom }}>
+        <socketContext.Provider value={{ socketId, playersOnline, gameState, emitNewGameState, emitStartGame, reqJoinRoom, insideWaitingRoom, emitForPlus2, emitForPlus4 }}>
             {children}
         </socketContext.Provider>
     )
