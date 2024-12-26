@@ -126,7 +126,7 @@ const VisibleCards = ({ deck, myTurn }: { deck: Card[], myTurn: boolean }) => {
 
           <div
             key={index}
-            onClick={() => { useCard(cardObject) }}
+            onClick={() => { if (myTurn) useCard(cardObject) }}
             className='h-full w-auto absolute rounded-lg hover:z-[100]'
             style={styles}
           >
