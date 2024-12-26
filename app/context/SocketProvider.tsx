@@ -13,11 +13,11 @@ interface SocketProviderProps {
 }
 
 export interface GameState {
-    roomId: string,
-    clockwise: boolean,
-    whoseTurn: Number,
-    discardCard: Card,
-    players: Array<any>
+    roomId: string | undefined,
+    clockwise: boolean | undefined,
+    whoseTurn: Number | undefined,
+    discardCard: Card | undefined,
+    players: Array<any> | undefined
 }
 
 export interface SocketContext {

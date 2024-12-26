@@ -6,13 +6,16 @@ import PlayerTop from '@/components/PlayerTop';
 import UsedCards from '@/components/UsedCards';
 import VisibleCards from '@/components/VisibleCards';
 import { sortCards } from '@/utils/cardGen';
+import { Card } from '@/utils/cardObjects';
 import { useSession } from 'next-auth/react';
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react'
 
 interface thisPlayerContextType {
     playerName: string,
     playerEmail: string,
+    
 }
+
 
 export const thisPlayerContext = createContext<thisPlayerContextType>({ playerName: '', playerEmail: '' })
 
@@ -27,6 +30,8 @@ const PlayGround = () => {
     console.log('Number of players', players?.length, players)
     let whoseTurn, thisplayer, deck, nextPlayer, nextNextPlayer, nextNextNextPlayer, nextCardCount, nextNextCardCount, nextNextNextCardCount
     let thisPLayerIndex = 0
+
+    
 
     if (players && gameState && session) {
         whoseTurn = players[gameState.whoseTurn as number]
