@@ -26,7 +26,7 @@ const VisibleCards = ({ deck, myTurn }: { deck: Card[], myTurn: boolean }) => {
       }
     })
 
-    if (!hasPlusCard && discardCard && ThisPlayerContext) {
+    if (!hasPlusCard && discardCard && ThisPlayerContext && myTurn) {
       if (gameState.counter !== 0) {
         //emit + card not available
         setTimeout(() => {
@@ -41,6 +41,11 @@ const VisibleCards = ({ deck, myTurn }: { deck: Card[], myTurn: boolean }) => {
 
 
   const useCard = (cardObject: Card) => {
+    if(discardCard?.value === '+2' || discardCard?.value === '+4'){
+      if(cardObject.value !== discardCard.value){
+        return
+      }
+    }
     if (discardCard?.color === cardObject.color || discardCard?.value === cardObject.value) {
       if (gameState && gameState.players) {
         if (gameState.players[0]) {
@@ -104,7 +109,7 @@ const VisibleCards = ({ deck, myTurn }: { deck: Card[], myTurn: boolean }) => {
           }
         }
 
-        if (myTurn && (cardObject.color == discardCard?.color || cardObject.value == discardCard?.value)) {
+        if (myTurn && ((discardCard?.value === '+2' || discardCard?.value === '+4')?(cardObject.value === discardCard.value):(cardObject.color == discardCard?.color || cardObject.value == discardCard?.value))) {
           styles = {
             ...styles,
             transform: `translate(${translateX}px, -20px)`

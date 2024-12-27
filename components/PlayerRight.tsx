@@ -13,8 +13,11 @@ const PlayerRight = ({noOfCards, myTurn}:{noOfCards : number, myTurn: boolean}) 
     <div className=' w-28 absolute right-[10%] top-1/2 translate-y-[-50%]'>
       {array.map((_, index)=>{
 
-        const translateX = (index + 1 - ((noOfCards-6)/2)) * 28
+        let translateX = (index + 1 - ((noOfCards-6)/2)) * 28
         // const translateY = index * 28
+        if(noOfCards>14){
+          translateX = (index + 1 - ((noOfCards-6)/2)) * 14
+        }
 
         let styles = {
           transform: `translateX(${translateX}px)`,
