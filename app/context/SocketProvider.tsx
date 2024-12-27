@@ -115,6 +115,9 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         _socket.on('Start Game', (roomId) => {
             redirect(`/game/${roomId}`)            
         })
+        _socket.on('got extra cards', (counter, player)=>{
+            console.log(`GOT EXTRA ${counter} CARDS`, player)
+        })
         setSocket(_socket)
 
 

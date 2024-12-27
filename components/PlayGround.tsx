@@ -28,7 +28,7 @@ const PlayGround = () => {
 
     const players = gameState?.players
     console.log('Number of players', players?.length, players)
-    let whoseTurn, thisplayer, deck, nextPlayer, nextNextPlayer, nextNextNextPlayer, nextCardCount, nextNextCardCount, nextNextNextCardCount
+    let whoseTurn:any, thisplayer: any, deck, nextPlayer, nextNextPlayer, nextNextNextPlayer, nextCardCount, nextNextCardCount, nextNextNextCardCount
     let thisPLayerIndex = 0
 
     
@@ -72,6 +72,18 @@ const PlayGround = () => {
             nextNextNextCardCount = players[(thisPLayerIndex + 3) % players.length].deck.length
 
         }
+                
+    }
+    const handleForward = () => {
+        if (SocketContext && SocketContext.gameState && session && thisplayer==whoseTurn) {
+            if(SocketContext.gameState.clockwise){
+                SocketContext.gameState.whoseTurn = (SocketContext.gameState.whoseTurn as number + 1) % SocketContext.gameState.players!.length
+            }
+            else{
+                SocketContext.gameState.whoseTurn = (SocketContext.gameState.whoseTurn as number - 1 + SocketContext.gameState.players!.length) % SocketContext.gameState.players!.length
+            }
+            SocketContext.emitNewGameState(SocketContext.gameState, session?.user?.email as string)
+        }
     }
 
     return session && players &&(
@@ -100,6 +112,9 @@ const PlayGround = () => {
                 )}
                 <CentralDeck />
                 {deck && <VisibleCards deck={deck} myTurn={thisplayer == whoseTurn} />}
+                <div onClick={handleForward} className='w-[20%] cursor-pointer rounded-md absolute bottom-10 right-10 p-2 flex justify-center items-center font-bold text-white bg-sky-600 hover:bg-sky-400 duration-250 focus:bg-sky-700'>
+                    FORWARD
+                </div>
             </div>
         </thisPlayerContext.Provider>
     )

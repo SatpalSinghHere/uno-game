@@ -27,13 +27,17 @@ const VisibleCards = ({ deck, myTurn }: { deck: Card[], myTurn: boolean }) => {
     })
 
     if (!hasPlusCard && discardCard && ThisPlayerContext) {
-      if (gameState.counter !== 0 ) {
+      if (gameState.counter !== 0) {
         //emit + card not available
-        SocketContext?.emitForNoPlusCard(gameState, ThisPlayerContext.playerEmail)
+        setTimeout(() => {
+          console.log('emitting no plus card by', ThisPlayerContext.playerEmail, ThisPlayerContext.playerName)
+          SocketContext?.emitForNoPlusCard(gameState, ThisPlayerContext.playerEmail)
+        }, 2000)
       }
 
     }
   }
+
 
 
   const useCard = (cardObject: Card) => {
@@ -107,7 +111,6 @@ const VisibleCards = ({ deck, myTurn }: { deck: Card[], myTurn: boolean }) => {
           }
         }
 
-        console.log('CARD ID', cardObject.id)
         // if(cardObject.flipped){
         //   styles = {
         //     ...styles,
