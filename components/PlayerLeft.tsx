@@ -5,6 +5,10 @@ import { cardList } from '@/utils/cardObjects'
 import React, { forwardRef, Ref, useImperativeHandle, useState } from 'react'
 import FadingText from './FadingText'
 
+export interface FadingTextRef {
+  setVisibleTrue: Function
+}
+
 const PlayerLeft = forwardRef(({noOfCards, myTurn}:{noOfCards : number, myTurn: boolean}, ref) => {
 
   const array = Array(noOfCards).fill(1)
@@ -13,7 +17,10 @@ const PlayerLeft = forwardRef(({noOfCards, myTurn}:{noOfCards : number, myTurn: 
 
   useImperativeHandle(ref, ()=>{
     return {
-      setVisibleTrue: setVisible(true)
+      setVisibleTrue: ()=>{
+        console.log('setting Fade text visible')
+        setVisible(true)
+      }
     }
   },[])
 
@@ -47,7 +54,7 @@ const PlayerLeft = forwardRef(({noOfCards, myTurn}:{noOfCards : number, myTurn: 
           </div>
         )
       })}
-      <FadingText onHide={()=>{setVisible(false)}} noOfCards={4} />
+      {visible && <FadingText onHide={()=>{setVisible(false)}} noOfCards={4} />}
     </div>
   )
 })

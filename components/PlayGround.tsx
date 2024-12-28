@@ -9,7 +9,7 @@ import { sortCards } from '@/utils/cardGen';
 import { Card } from '@/utils/cardObjects';
 import { useSession } from 'next-auth/react';
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
-import { FadingTextRef } from './FadingText';
+import { FadingTextRef } from './PlayerLeft';
 
 interface thisPlayerContextType {
     playerName: string,
@@ -88,9 +88,17 @@ const PlayGround = () => {
     }
 
     const leftFadeRef = useRef<FadingTextRef>(null)
-    const handleLeftFade = () => {
+    const rightFadeRef = useRef<FadingTextRef>(null)
+    const topFadeRef = useRef<FadingTextRef>(null)
+    const handleFade = () => {
         if (leftFadeRef.current) {
             leftFadeRef.current.setVisibleTrue()
+        }
+        if (rightFadeRef.current) {
+            rightFadeRef.current.setVisibleTrue()
+        }
+        if (topFadeRef.current) {
+            topFadeRef.current.setVisibleTrue()
         }
     }
 
@@ -104,18 +112,18 @@ const PlayGround = () => {
                     <option value="4">4</option>
                 </select> */}
 
-                {players?.length === 2 && <PlayerTop noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn}/>}
+                {players?.length === 2 && <PlayerTop noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn} ref={topFadeRef} />}
                 {players?.length === 3 && (
                     <>
                         <PlayerLeft noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn} ref={leftFadeRef}/>
-                        <PlayerRight noOfCards={nextNextCardCount} myTurn={nextNextPlayer == whoseTurn}/>
+                        <PlayerRight noOfCards={nextNextCardCount} myTurn={nextNextPlayer == whoseTurn} ref={rightFadeRef} />
                     </>
                 )}
                 {players?.length === 4 && (
                     <>
                         <PlayerLeft noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn} ref={leftFadeRef} />
-                        <PlayerRight noOfCards={nextNextCardCount} myTurn={nextNextNextPlayer == whoseTurn}/>
-                        <PlayerTop noOfCards={nextNextNextCardCount} myTurn={nextNextPlayer == whoseTurn}/>
+                        <PlayerRight noOfCards={nextNextCardCount} myTurn={nextNextNextPlayer == whoseTurn} ref={rightFadeRef} />
+                        <PlayerTop noOfCards={nextNextNextCardCount} myTurn={nextNextPlayer == whoseTurn} ref={topFadeRef} />
                     </>
                 )}
                 <CentralDeck />
@@ -123,7 +131,7 @@ const PlayGround = () => {
                 <div onClick={handleForward} className='w-[20%] cursor-pointer rounded-md absolute bottom-10 right-10 p-2 flex justify-center items-center font-bold text-white bg-sky-600 hover:bg-sky-400 duration-250 focus:bg-sky-700'>
                     FORWARD
                 </div>
-                <div onClick={handleLeftFade} className='w-[20%] cursor-pointer rounded-md absolute top-10 left-10 p-2 flex justify-center items-center font-bold text-white bg-sky-600 hover:bg-sky-400 duration-250 focus:bg-sky-700'>
+                <div onClick={handleFade} className='w-[20%] cursor-pointer rounded-md absolute top-10 left-10 p-2 flex justify-center items-center font-bold text-white bg-sky-600 hover:bg-sky-400 duration-250 focus:bg-sky-700'>
                     ENABLE FADE
                 </div>
             </div>

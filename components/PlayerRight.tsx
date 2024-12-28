@@ -1,11 +1,23 @@
 import CardTemplate from '@/utils/Card'
 import CardBack from '@/utils/CardBack'
 import { cardList } from '@/utils/cardObjects'
-import React, { useState } from 'react'
+import React, { forwardRef, useImperativeHandle, useState } from 'react'
+import FadingText from './FadingText'
 
-const PlayerRight = ({noOfCards, myTurn}:{noOfCards : number, myTurn: boolean}) => {
+const PlayerRight = forwardRef(({noOfCards, myTurn}:{noOfCards : number, myTurn: boolean}, ref) => {
   
   const array = Array(noOfCards).fill(1)
+
+  const [visible, setVisible] = useState(false)
+
+  useImperativeHandle(ref, ()=>{
+    return {
+      setVisibleTrue: ()=>{
+        console.log('setting Fade text visible')
+        setVisible(true)
+      }
+    }
+  },[])
 
   // console.log(array)
 
@@ -40,8 +52,9 @@ const PlayerRight = ({noOfCards, myTurn}:{noOfCards : number, myTurn: boolean}) 
           </div>
         )
       })}
+      {visible && <FadingText onHide={()=>{setVisible(false)}} noOfCards={4} />}
     </div>
   )
-}
+})
 
 export default PlayerRight
