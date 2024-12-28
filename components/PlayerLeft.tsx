@@ -1,11 +1,23 @@
+'use client'
 import CardTemplate from '@/utils/Card'
 import CardBack from '@/utils/CardBack'
 import { cardList } from '@/utils/cardObjects'
-import React, { useState } from 'react'
+import React, { forwardRef, Ref, useImperativeHandle, useState } from 'react'
+import FadingText from './FadingText'
 
-const PlayerLeft = ({noOfCards, myTurn}:{noOfCards : number, myTurn: boolean}) => {
+const PlayerLeft = forwardRef(({noOfCards, myTurn}:{noOfCards : number, myTurn: boolean}, ref) => {
 
   const array = Array(noOfCards).fill(1)
+
+  const [visible, setVisible] = useState(false)
+
+  useImperativeHandle(ref, ()=>{
+    return {
+      setVisibleTrue: setVisible(true)
+    }
+  },[])
+
+  
 
   return (
     <div className=' w-28 absolute left-[10%] top-1/2 translate-y-[-50%]'>
@@ -35,8 +47,9 @@ const PlayerLeft = ({noOfCards, myTurn}:{noOfCards : number, myTurn: boolean}) =
           </div>
         )
       })}
+      <FadingText onHide={()=>{setVisible(false)}} noOfCards={4} />
     </div>
   )
-}
+})
 
 export default PlayerLeft

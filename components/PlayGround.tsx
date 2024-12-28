@@ -8,7 +8,8 @@ import VisibleCards from '@/components/VisibleCards';
 import { sortCards } from '@/utils/cardGen';
 import { Card } from '@/utils/cardObjects';
 import { useSession } from 'next-auth/react';
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react'
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { FadingTextRef } from './FadingText';
 
 interface thisPlayerContextType {
     playerName: string,
@@ -86,6 +87,13 @@ const PlayGround = () => {
         }
     }
 
+    const leftFadeRef = useRef<FadingTextRef>(null)
+    const handleLeftFade = () => {
+        if (leftFadeRef.current) {
+            leftFadeRef.current.setVisibleTrue()
+        }
+    }
+
     return session && players &&(
         <thisPlayerContext.Provider value={{ playerName: session?.user?.name as string, playerEmail: session?.user?.email as string }}>
             <div className="absolute w-full h-full items-center bg-red-950">
@@ -99,13 +107,13 @@ const PlayGround = () => {
                 {players?.length === 2 && <PlayerTop noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn}/>}
                 {players?.length === 3 && (
                     <>
-                        <PlayerLeft noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn}/>
+                        <PlayerLeft noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn} ref={leftFadeRef}/>
                         <PlayerRight noOfCards={nextNextCardCount} myTurn={nextNextPlayer == whoseTurn}/>
                     </>
                 )}
                 {players?.length === 4 && (
                     <>
-                        <PlayerLeft noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn}/>
+                        <PlayerLeft noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn} ref={leftFadeRef} />
                         <PlayerRight noOfCards={nextNextCardCount} myTurn={nextNextNextPlayer == whoseTurn}/>
                         <PlayerTop noOfCards={nextNextNextCardCount} myTurn={nextNextPlayer == whoseTurn}/>
                     </>
@@ -114,6 +122,9 @@ const PlayGround = () => {
                 {deck && <VisibleCards deck={deck} myTurn={thisplayer == whoseTurn} />}
                 <div onClick={handleForward} className='w-[20%] cursor-pointer rounded-md absolute bottom-10 right-10 p-2 flex justify-center items-center font-bold text-white bg-sky-600 hover:bg-sky-400 duration-250 focus:bg-sky-700'>
                     FORWARD
+                </div>
+                <div onClick={handleLeftFade} className='w-[20%] cursor-pointer rounded-md absolute top-10 left-10 p-2 flex justify-center items-center font-bold text-white bg-sky-600 hover:bg-sky-400 duration-250 focus:bg-sky-700'>
+                    ENABLE FADE
                 </div>
             </div>
         </thisPlayerContext.Provider>

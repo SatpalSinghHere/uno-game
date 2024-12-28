@@ -12,7 +12,17 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      keyframes:{
+        fadeup: {
+          "0%": { opacity: '1', transform: "translateY(0)" },
+          "100%": { opacity: '0', transform: "translateY(-100px)" },
+        }
+      },
+      animation: {
+        fadeup: "fadeup 1s ease-out",
+      },
     },
+    
   },
   plugins: [require("@xpd/tailwind-3dtransforms")],
 };
