@@ -30,7 +30,10 @@ const PlayerRight = forwardRef(({noOfCards, myTurn}:{noOfCards : number, myTurn:
 
         let translateX = (index + 1 - ((noOfCards-6)/2)) * 28
         // const translateY = index * 28
-        if(noOfCards>14){
+        if(noOfCards>14 && noOfCards < 20){
+          translateX = (index + 1 - ((noOfCards-6)/2)) * 18
+        }
+        if(noOfCards>19){
           translateX = (index + 1 - ((noOfCards-6)/2)) * 14
         }
 

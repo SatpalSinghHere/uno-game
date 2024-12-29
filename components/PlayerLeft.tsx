@@ -33,8 +33,14 @@ const PlayerLeft = forwardRef(({noOfCards, myTurn}:{noOfCards : number, myTurn: 
     <div className=' w-28 absolute left-[10%] top-1/2 translate-y-[-50%]'>
       {array.map((_, index)=>{
 
-        const translateX = (index + 1 - ((noOfCards+6)/2)) * 28
+        let translateX = (index + 1 - ((noOfCards+6)/2)) * 28
         // const translateY = index * 28
+        if(noOfCards > 14 && noOfCards < 20){
+          translateX = (index + 1 - ((noOfCards+6)/2)) * 18
+        }
+        if(noOfCards > 19){
+          translateX = (index + 1 - ((noOfCards+6)/2)) * 14
+        }
 
         let styles = {
           transform: `translateX(${translateX}px)`,
