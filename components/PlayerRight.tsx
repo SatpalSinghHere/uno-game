@@ -8,12 +8,15 @@ const PlayerRight = forwardRef(({noOfCards, myTurn}:{noOfCards : number, myTurn:
   
   const array = Array(noOfCards).fill(1)
 
+  const [extraCardsCount, setExtraCardsCount] = useState<number>(0)
+
   const [visible, setVisible] = useState(false)
 
   useImperativeHandle(ref, ()=>{
     return {
-      setVisibleTrue: ()=>{
-        console.log('setting Fade text visible')
+      setVisibleTrue: (count: number)=>{
+        setExtraCardsCount(count)
+        console.log('setting right Fade text visible', extraCardsCount)
         setVisible(true)
       }
     }
@@ -52,7 +55,7 @@ const PlayerRight = forwardRef(({noOfCards, myTurn}:{noOfCards : number, myTurn:
           </div>
         )
       })}
-      {visible && <FadingText onHide={()=>{setVisible(false)}} noOfCards={4} />}
+      {visible && <FadingText onHide={()=>{setVisible(false)}} noOfCards={extraCardsCount} />}
     </div>
   )
 })

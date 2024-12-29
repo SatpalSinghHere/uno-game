@@ -31,8 +31,9 @@ const PlayGround = () => {
     console.log('Number of players', players?.length, players)
     let whoseTurn:any, thisplayer: any, deck, nextPlayer, nextNextPlayer, nextNextNextPlayer, nextCardCount, nextNextCardCount, nextNextNextCardCount
     let thisPLayerIndex = 0
-
-    
+    const leftFadeRef = useRef<FadingTextRef>(null)
+    const rightFadeRef = useRef<FadingTextRef>(null)
+    const topFadeRef = useRef<FadingTextRef>(null)    
 
     if (players && gameState && session) {
         whoseTurn = players[gameState.whoseTurn as number]
@@ -72,6 +73,49 @@ const PlayGround = () => {
             nextNextCardCount = players[(thisPLayerIndex + 2) % players.length].deck.length
             nextNextNextCardCount = players[(thisPLayerIndex + 3) % players.length].deck.length
 
+            if(gameState.extraCards){
+                console.log(gameState.extraCards.playerEmail ,`got extra ${gameState.extraCards.counter} cards`)
+                if(players.length === 2){
+                    if ((nextPlayer.email == gameState.extraCards.playerEmail)){
+                        if (topFadeRef.current) {
+                            topFadeRef.current.setVisibleTrue(gameState.extraCards.counter)
+                        }
+                    }
+                    //else
+                }
+                if(players.length === 3){
+                    if ((nextPlayer.email == gameState.extraCards.playerEmail)){
+                        if (leftFadeRef.current) {
+                            leftFadeRef.current.setVisibleTrue(gameState.extraCards.counter)
+                        }
+                    }
+                    else if(nextNextPlayer.email == gameState.extraCards.playerEmail){
+                        if (rightFadeRef.current) {
+                            rightFadeRef.current.setVisibleTrue(gameState.extraCards.counter)
+                        }
+                    }
+                }
+                if(players.length === 4){
+                    if ((nextPlayer.email == gameState.extraCards.playerEmail)){
+                        if (leftFadeRef.current) {
+                            leftFadeRef.current.setVisibleTrue(gameState.extraCards.counter)
+                        }
+                    }
+                    else if(nextNextNextPlayer.email == gameState.extraCards.playerEmail){
+                        if (rightFadeRef.current) {
+                            rightFadeRef.current.setVisibleTrue(gameState.extraCards.counter)
+                        }
+                    }
+                    else if(nextNextPlayer.email == gameState.extraCards.playerEmail){
+                        if (topFadeRef.current) {
+                            topFadeRef.current.setVisibleTrue(gameState.extraCards.counter)
+                        }
+                    }
+                    SocketContext.gameState!.extraCards = null
+                }
+
+            }
+
         }
                 
     }
@@ -87,20 +131,20 @@ const PlayGround = () => {
         }
     }
 
-    const leftFadeRef = useRef<FadingTextRef>(null)
-    const rightFadeRef = useRef<FadingTextRef>(null)
-    const topFadeRef = useRef<FadingTextRef>(null)
+    
     const handleFade = () => {
         if (leftFadeRef.current) {
-            leftFadeRef.current.setVisibleTrue()
+            leftFadeRef.current.setVisibleTrue(3)
         }
         if (rightFadeRef.current) {
-            rightFadeRef.current.setVisibleTrue()
+            rightFadeRef.current.setVisibleTrue(3)
         }
         if (topFadeRef.current) {
-            topFadeRef.current.setVisibleTrue()
+            topFadeRef.current.setVisibleTrue(3)
         }
     }
+
+    
 
     return session && players &&(
         <thisPlayerContext.Provider value={{ playerName: session?.user?.name as string, playerEmail: session?.user?.email as string }}>

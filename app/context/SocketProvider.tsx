@@ -17,6 +17,10 @@ export interface GameState {
     clockwise: boolean | undefined,
     whoseTurn: Number | undefined,
     discardCard: Card | undefined,
+    extraCards: {
+        playerEmail: string,
+        counter: number
+    } | null
     players: Array<any> | undefined,
     counter: number
 }
@@ -30,7 +34,7 @@ export interface SocketContext {
     reqJoinRoom: (roomId: string, username: string, userEmail: string, deck: Card[]) => void,
     insideWaitingRoom: (playername: string, roomId: string) => void,
     emitForNoPlusCard : (gameStateData: GameState,playerEmail: string)=>void,
-    
+    gotExtraCards: any | null
 }
 
 export const socketContext = createContext<SocketContext | undefined>(undefined);
@@ -82,6 +86,11 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         }
     }, [socket])
 
+    const gotExtraCards: any = {
+        counter: 0,
+        playerEmail: ''
+    }
+
     // const emitNewCentralCard: SocketContext['emitNewGameState'] = useCallback((card: Card) => {
     //     if (socket) {
     //         console.log("Emitting new central card ", card)
@@ -117,6 +126,8 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         })
         _socket.on('got extra cards', (counter, player)=>{
             console.log(`GOT EXTRA ${counter} CARDS`, player)
+            gotExtraCards.counter = counter
+            gotExtraCards.playerEmail = player
         })
         setSocket(_socket)
 
@@ -130,7 +141,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     }, [])
 
     return (
-        <socketContext.Provider value={{ socketId, playersOnline, gameState, emitNewGameState, emitStartGame, reqJoinRoom, insideWaitingRoom, emitForNoPlusCard }}>
+        <socketContext.Provider value={{ socketId, playersOnline, gameState, emitNewGameState, emitStartGame, reqJoinRoom, insideWaitingRoom, emitForNoPlusCard, gotExtraCards }}>
             {children}
         </socketContext.Provider>
     )
