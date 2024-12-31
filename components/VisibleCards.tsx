@@ -1,5 +1,5 @@
 'use client'
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { forwardRef, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import card from '@/utils/card.svg';
 import CardTemplate from '@/utils/Card';
 import { Card, cardList } from '@/utils/cardObjects';
@@ -7,10 +7,11 @@ import { GameState, socketContext } from '@/app/context/SocketProvider';
 import { thisPlayerContext } from './PlayGround';
 import { motion } from 'framer-motion';
 import CardBack from '@/utils/CardBack';
+import FadingText from './FadingText';
 
 
 
-const VisibleCards = ({ deck, myTurn }: { deck: Card[], myTurn: boolean }) => {
+const VisibleCards = forwardRef(({ deck, myTurn, firstName }: { deck: Card[], myTurn: boolean, firstName: string }, ref) => {
 
   const SocketContext = useContext(socketContext)
   const ThisPlayerContext = useContext(thisPlayerContext)
@@ -85,6 +86,20 @@ const VisibleCards = ({ deck, myTurn }: { deck: Card[], myTurn: boolean }) => {
 
   };
 
+  const [extraCardsCount, setExtraCardsCount] = useState<number>(0)
+
+  const [visible, setVisible] = useState(false)
+
+  useImperativeHandle(ref, () => {
+    return {
+      setVisibleTrue: (count: number) => {
+        setExtraCardsCount(count)
+        console.log('setting right Fade text visible', extraCardsCount)
+        setVisible(true)
+      }
+    }
+  }, [])
+
   return (
 
     <div className={'absolute bottom-[5%] h-36 left-1/2 translate-x-[-50%]'}>
@@ -147,9 +162,11 @@ const VisibleCards = ({ deck, myTurn }: { deck: Card[], myTurn: boolean }) => {
           </div>
         )
       })}
+      {visible && <FadingText onHide={() => { setVisible(false) }} noOfCards={extraCardsCount} />}
+      <span className='absolute translate-y-[200px] text-white font-bold font-outline-1 text-lg'>{`${firstName}(${deck.length})`}</span>
     </div>
 
   );
-}
+})
 
 export default VisibleCards

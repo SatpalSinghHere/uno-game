@@ -34,6 +34,7 @@ const PlayGround = () => {
     const leftFadeRef = useRef<FadingTextRef>(null)
     const rightFadeRef = useRef<FadingTextRef>(null)
     const topFadeRef = useRef<FadingTextRef>(null)
+    const bottomFadeRef = useRef<FadingTextRef>(null)
 
     if (players && gameState && session) {
         whoseTurn = players[gameState.whoseTurn as number]
@@ -173,7 +174,7 @@ const PlayGround = () => {
                     </>
                 )}
                 <CentralDeck />
-                {deck && <VisibleCards deck={deck} myTurn={thisplayer == whoseTurn} />}
+                {deck && <VisibleCards deck={deck} myTurn={thisplayer == whoseTurn} firstName={thisplayer.playerName.split(' ')[0]} ref={bottomFadeRef} />}
                 <div onClick={handleForward} className='w-[20%] cursor-pointer rounded-md absolute bottom-10 right-10 p-2 flex justify-center items-center font-bold text-white bg-sky-600 hover:bg-sky-400 duration-250 focus:bg-sky-700'>
                     FORWARD
                 </div>
