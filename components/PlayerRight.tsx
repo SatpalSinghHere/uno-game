@@ -59,7 +59,7 @@ const PlayerRight = forwardRef(({ noOfCards, myTurn, firstName }: { noOfCards: n
         )
       })}
       {visible && <FadingText onHide={() => { setVisible(false) }} noOfCards={extraCardsCount} />}
-      (<span className='absolute translate-y-[170px] text-white font-bold font-outline-1 text-lg'>{`${firstName}(${noOfCards})`}</span>)
+      <span className='absolute translate-y-[170px] text-white font-bold font-outline-1 text-lg'>{`${firstName}(${noOfCards})`}</span>
     </div>
   )
 })

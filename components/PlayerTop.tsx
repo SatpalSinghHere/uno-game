@@ -3,7 +3,7 @@ import { cardList } from '@/utils/cardObjects';
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
 import FadingText from './FadingText';
 
-const PlayerTop = forwardRef(({noOfCards, myTurn}:{noOfCards : number, myTurn: boolean}, ref) => {
+const PlayerTop = forwardRef(({noOfCards, myTurn, firstName}:{noOfCards : number, myTurn: boolean, firstName: string}, ref) => {
 
   const array = Array(noOfCards).fill(1)
   const [extraCardsCount, setExtraCardsCount] = useState<number>(0)
@@ -61,6 +61,7 @@ const PlayerTop = forwardRef(({noOfCards, myTurn}:{noOfCards : number, myTurn: b
         );
       })}
       {visible && <FadingText onHide={()=>{setVisible(false)}} noOfCards={extraCardsCount} />}
+      <span className='absolute translate-y-[-26px] -translate-x-1/2 text-white font-bold font-outline-1 text-lg'>{`${firstName}(${noOfCards})`}</span>
     </div>
   )
 })

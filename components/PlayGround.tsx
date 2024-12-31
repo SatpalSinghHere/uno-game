@@ -158,7 +158,7 @@ const PlayGround = () => {
                     <option value="4">4</option>
                 </select> */}
 
-                {players?.length === 2 && <PlayerTop noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn} ref={topFadeRef} />}
+                {players?.length === 2 && <PlayerTop noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn} firstName={nextPlayer.playerName.split(' ')[0]} ref={topFadeRef} />}
                 {players?.length === 3 && (
                     <>
                         <PlayerLeft noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn} ref={leftFadeRef} firstName={nextPlayer.playerName.split(' ')[0]} />
@@ -169,7 +169,7 @@ const PlayGround = () => {
                     <>
                         <PlayerLeft noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn} ref={leftFadeRef} firstName={nextPlayer.playerName.split(' ')[0]} />
                         <PlayerRight noOfCards={nextNextNextCardCount} myTurn={nextNextNextPlayer == whoseTurn} firstName={nextNextNextPlayer.playerName.split(' ')[0]} ref={rightFadeRef} />
-                        <PlayerTop noOfCards={nextNextNextCardCount} myTurn={nextNextPlayer == whoseTurn} ref={topFadeRef} />
+                        <PlayerTop noOfCards={nextNextCardCount} myTurn={nextNextPlayer == whoseTurn} firstName={nextNextPlayer.playerName.split(' ')[0]} ref={topFadeRef} />
                     </>
                 )}
                 <CentralDeck />
