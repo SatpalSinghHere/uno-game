@@ -102,7 +102,7 @@ const VisibleCards = forwardRef(({ deck, myTurn, firstName }: { deck: Card[], my
 
   return (
 
-    <div className={'absolute bottom-[5%] h-36 left-1/2 translate-x-[-50%]'}>
+    <div className={'absolute bottom-[2%] h-36 left-1/2 translate-x-[-50%]'}>
 
       {deck && deck.map((cardObject, index) => {
         const translateX = (index + 1 - ((deck.length + 4) / 2)) * 28;
@@ -156,14 +156,14 @@ const VisibleCards = forwardRef(({ deck, myTurn, firstName }: { deck: Card[], my
             style={styles}
           >
 
-            <CardTemplate className={'h-full bg-white rounded-lg hover:translate-y-[-8px] hover:scale-125  duration-75 cursor-pointer'} color={cardObject.color} value={cardObject.value} />
+            <CardTemplate className={'h-full bg-white rounded-lg hover:translate-y-[-8px] hover:scale-125 hover:z-200  duration-75 cursor-pointer'} color={cardObject.color} value={cardObject.value} />
 
 
           </div>
         )
       })}
       {visible && <FadingText onHide={() => { setVisible(false) }} noOfCards={extraCardsCount} />}
-      <span className='absolute translate-y-[200px] text-white font-bold font-outline-1 text-lg'>{`${firstName}(${deck.length})`}</span>
+      <span className='absolute translate-y-[-50px] text-white font-bold font-outline-1 text-lg'>{`${firstName}(${deck.length})`}</span>
     </div>
 
   );

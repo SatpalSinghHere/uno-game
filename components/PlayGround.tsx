@@ -145,6 +145,9 @@ const PlayGround = () => {
         if (topFadeRef.current) {
             topFadeRef.current.setVisibleTrue(3)
         }
+        if (bottomFadeRef.current) {
+            bottomFadeRef.current.setVisibleTrue(3)
+        }
     }
 
 
