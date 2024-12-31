@@ -106,6 +106,8 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
     const handleNewGameState = useCallback((gameState : GameState)=>{
         console.log('Receiving new game state', gameState)
+        let audio = new Audio('/sound/new-game-state-sound.wav')
+        audio.play()
         setGameState(gameState)
     }, [])
 
@@ -122,6 +124,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         _socket.on('players waiting', newOnlinePlayers)
         _socket.on('new game state', handleNewGameState)
         _socket.on('Start Game', (roomId) => {
+
             redirect(`/game/${roomId}`)            
         })
         _socket.on('got extra cards', (counter, player)=>{

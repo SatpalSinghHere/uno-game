@@ -14,7 +14,7 @@ import { FadingTextRef } from './PlayerLeft';
 interface thisPlayerContextType {
     playerName: string,
     playerEmail: string,
-    
+
 }
 
 
@@ -29,11 +29,11 @@ const PlayGround = () => {
 
     const players = gameState?.players
     console.log('Number of players', players?.length, players)
-    let whoseTurn:any, thisplayer: any, deck, nextPlayer, nextNextPlayer, nextNextNextPlayer, nextCardCount, nextNextCardCount, nextNextNextCardCount
+    let whoseTurn: any, thisplayer: any, deck, nextPlayer, nextNextPlayer, nextNextNextPlayer, nextCardCount, nextNextCardCount, nextNextNextCardCount
     let thisPLayerIndex = 0
     const leftFadeRef = useRef<FadingTextRef>(null)
     const rightFadeRef = useRef<FadingTextRef>(null)
-    const topFadeRef = useRef<FadingTextRef>(null)    
+    const topFadeRef = useRef<FadingTextRef>(null)
 
     if (players && gameState && session) {
         whoseTurn = players[gameState.whoseTurn as number]
@@ -41,11 +41,11 @@ const PlayGround = () => {
             if (player) {
                 return player['email'] === session.user?.email
             }
-            else{
+            else {
                 return false
             }
         })
-        
+
         players.forEach(player => {
             console.log('PLAYER', player)
         })
@@ -55,7 +55,7 @@ const PlayGround = () => {
 
 
         deck = thisplayer?.deck as Array<any>
-        
+
         if (deck) {
             sortCards(deck)
 
@@ -73,65 +73,67 @@ const PlayGround = () => {
             nextNextCardCount = players[(thisPLayerIndex + 2) % players.length].deck.length
             nextNextNextCardCount = players[(thisPLayerIndex + 3) % players.length].deck.length
 
-            if(gameState.extraCards){
-                console.log(gameState.extraCards.playerEmail ,`got extra ${gameState.extraCards.counter} cards`)
-                if(players.length === 2){
-                    if ((nextPlayer.email == gameState.extraCards.playerEmail)){
+            if (gameState.extraCards) {
+                console.log(gameState.extraCards.playerEmail, `got extra ${gameState.extraCards.counter} cards`)
+                if (players.length === 2) {
+                    if ((nextPlayer.email == gameState.extraCards.playerEmail)) {
                         if (topFadeRef.current) {
                             topFadeRef.current.setVisibleTrue(gameState.extraCards.counter)
                         }
                     }
                     //else
                 }
-                if(players.length === 3){
-                    if ((nextPlayer.email == gameState.extraCards.playerEmail)){
+                if (players.length === 3) {
+                    if ((nextPlayer.email == gameState.extraCards.playerEmail)) {
                         if (leftFadeRef.current) {
                             leftFadeRef.current.setVisibleTrue(gameState.extraCards.counter)
                         }
                     }
-                    else if(nextNextPlayer.email == gameState.extraCards.playerEmail){
+                    else if (nextNextPlayer.email == gameState.extraCards.playerEmail) {
                         if (rightFadeRef.current) {
                             rightFadeRef.current.setVisibleTrue(gameState.extraCards.counter)
                         }
                     }
                 }
-                if(players.length === 4){
-                    if ((nextPlayer.email == gameState.extraCards.playerEmail)){
+                if (players.length === 4) {
+                    if ((nextPlayer.email == gameState.extraCards.playerEmail)) {
                         if (leftFadeRef.current) {
                             leftFadeRef.current.setVisibleTrue(gameState.extraCards.counter)
                         }
                     }
-                    else if(nextNextNextPlayer.email == gameState.extraCards.playerEmail){
+                    else if (nextNextNextPlayer.email == gameState.extraCards.playerEmail) {
                         if (rightFadeRef.current) {
                             rightFadeRef.current.setVisibleTrue(gameState.extraCards.counter)
                         }
                     }
-                    else if(nextNextPlayer.email == gameState.extraCards.playerEmail){
+                    else if (nextNextPlayer.email == gameState.extraCards.playerEmail) {
                         if (topFadeRef.current) {
                             topFadeRef.current.setVisibleTrue(gameState.extraCards.counter)
                         }
                     }
                     SocketContext.gameState!.extraCards = null
+
+                    
                 }
 
             }
 
         }
-                
+
     }
     const handleForward = () => {
-        if (SocketContext && SocketContext.gameState && session && thisplayer==whoseTurn) {
-            if(SocketContext.gameState.clockwise){
+        if (SocketContext && SocketContext.gameState && session && thisplayer == whoseTurn) {
+            if (SocketContext.gameState.clockwise) {
                 SocketContext.gameState.whoseTurn = (SocketContext.gameState.whoseTurn as number + 1) % SocketContext.gameState.players!.length
             }
-            else{
+            else {
                 SocketContext.gameState.whoseTurn = (SocketContext.gameState.whoseTurn as number - 1 + SocketContext.gameState.players!.length) % SocketContext.gameState.players!.length
             }
             SocketContext.emitNewGameState(SocketContext.gameState, session?.user?.email as string)
         }
     }
 
-    
+
     const handleFade = () => {
         if (leftFadeRef.current) {
             leftFadeRef.current.setVisibleTrue(3)
@@ -144,9 +146,9 @@ const PlayGround = () => {
         }
     }
 
-    
 
-    return session && players &&(
+
+    return session && players && (
         <thisPlayerContext.Provider value={{ playerName: session?.user?.name as string, playerEmail: session?.user?.email as string }}>
             <div className="absolute w-full h-full items-center bg-red-950">
 
@@ -159,14 +161,14 @@ const PlayGround = () => {
                 {players?.length === 2 && <PlayerTop noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn} ref={topFadeRef} />}
                 {players?.length === 3 && (
                     <>
-                        <PlayerLeft noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn} ref={leftFadeRef}/>
-                        <PlayerRight noOfCards={nextNextCardCount} myTurn={nextNextPlayer == whoseTurn} ref={rightFadeRef} />
+                        <PlayerLeft noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn} ref={leftFadeRef} firstName={nextPlayer.playerName.split(' ')[0]} />
+                        <PlayerRight noOfCards={nextNextCardCount} myTurn={nextNextPlayer == whoseTurn} firstName={nextNextPlayer.playerName.split(' ')[0]} ref={rightFadeRef} />
                     </>
                 )}
                 {players?.length === 4 && (
                     <>
-                        <PlayerLeft noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn} ref={leftFadeRef} />
-                        <PlayerRight noOfCards={nextNextCardCount} myTurn={nextNextNextPlayer == whoseTurn} ref={rightFadeRef} />
+                        <PlayerLeft noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn} ref={leftFadeRef} firstName={nextPlayer.playerName.split(' ')[0]} />
+                        <PlayerRight noOfCards={nextNextNextCardCount} myTurn={nextNextNextPlayer == whoseTurn} firstName={nextNextNextPlayer.playerName.split(' ')[0]} ref={rightFadeRef} />
                         <PlayerTop noOfCards={nextNextNextCardCount} myTurn={nextNextPlayer == whoseTurn} ref={topFadeRef} />
                     </>
                 )}

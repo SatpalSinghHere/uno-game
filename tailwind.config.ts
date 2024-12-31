@@ -12,6 +12,10 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      boxShadow: {
+        textoutlinewhite: "0px 0px 0px 2px white",
+        textoutlineblack: "0px 0px 0px 2px black",
+      },
       keyframes:{
         fadeup: {
           "0%": { opacity: '1', transform: "translate(-30%,-30%)" },

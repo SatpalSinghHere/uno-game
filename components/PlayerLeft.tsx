@@ -9,7 +9,7 @@ export interface FadingTextRef {
   setVisibleTrue: Function
 }
 
-const PlayerLeft = forwardRef(({noOfCards, myTurn}:{noOfCards : number, myTurn: boolean}, ref) => {
+const PlayerLeft = forwardRef(({noOfCards, myTurn, firstName}:{noOfCards : number, myTurn: boolean, firstName: string}, ref) => {
 
   const array = Array(noOfCards).fill(1)
 
@@ -64,6 +64,7 @@ const PlayerLeft = forwardRef(({noOfCards, myTurn}:{noOfCards : number, myTurn: 
         )
       })}
       {visible && <FadingText onHide={()=>{setVisible(false)}} noOfCards={extraCardsCount} />}
+      <span className='absolute translate-y-[200px] text-white font-bold font-outline-1 text-lg'>{`${firstName}(${noOfCards})`}</span>
     </div>
   )
 })
