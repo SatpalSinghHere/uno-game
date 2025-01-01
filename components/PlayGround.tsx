@@ -5,7 +5,7 @@ import PlayerRight from '@/components/PlayerRight';
 import PlayerTop from '@/components/PlayerTop';
 import UsedCards from '@/components/UsedCards';
 import VisibleCards from '@/components/VisibleCards';
-import { sortCards } from '@/utils/cardGen';
+import { randomDeckGen, sortCards } from '@/utils/cardGen';
 import { Card } from '@/utils/cardObjects';
 import { useSession } from 'next-auth/react';
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
@@ -112,9 +112,7 @@ const PlayGround = () => {
                             topFadeRef.current.setVisibleTrue(gameState.extraCards.counter)
                         }
                     }
-                    SocketContext.gameState!.extraCards = null
-
-                    
+                                        
                 }
 
             }
@@ -124,12 +122,14 @@ const PlayGround = () => {
     }
     const handleForward = () => {
         if (SocketContext && SocketContext.gameState && session && thisplayer == whoseTurn) {
+            SocketContext.gameState.players![thisPLayerIndex].deck = [...SocketContext.gameState.players![thisPLayerIndex].deck, randomDeckGen(1) ] 
             if (SocketContext.gameState.clockwise) {
                 SocketContext.gameState.whoseTurn = (SocketContext.gameState.whoseTurn as number + 1) % SocketContext.gameState.players!.length
             }
             else {
                 SocketContext.gameState.whoseTurn = (SocketContext.gameState.whoseTurn as number - 1 + SocketContext.gameState.players!.length) % SocketContext.gameState.players!.length
             }
+            SocketContext.gameState!.extraCards = null
             SocketContext.emitNewGameState(SocketContext.gameState, session?.user?.email as string)
         }
     }
