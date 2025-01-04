@@ -60,11 +60,12 @@ const PlayerLeft = forwardRef(({noOfCards, myTurn, firstName}:{noOfCards : numbe
         return (
           <div key={index} className='absolute rounded-lg' style={styles}>
             <CardBack className={'w-full h-auto bg-white rounded-lg'}/>
+            {index==array.length - 1 && <span style={{transform : `translate(${translateX + 28}px, 85px)`, rotate:'-90deg'}} className='absolute text-white font-bold font-outline-1 text-lg'>{`${firstName}(${noOfCards})`}</span>}
           </div>
         )
       })}
       {visible && <FadingText onHide={()=>{setVisible(false)}} noOfCards={extraCardsCount} />}
-      <span className='absolute translate-y-[200px] text-white font-bold font-outline-1 text-lg'>{`${firstName}(${noOfCards})`}</span>
+      
     </div>
   )
 })
