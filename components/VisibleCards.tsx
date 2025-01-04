@@ -163,7 +163,7 @@ const VisibleCards = forwardRef(({ deck, myTurn, firstName }: { deck: Card[], my
         )
       })}
       {visible && <FadingText onHide={() => { setVisible(false) }} noOfCards={extraCardsCount} />}
-      <span className='absolute translate-y-[-50px] text-white font-bold font-outline-1 text-lg'>{`${firstName}(${deck.length})`}</span>
+      <span className='absolute translate-y-[-35px] -translate-x-1/2 text-white font-bold font-outline-1 text-lg'>{`${firstName}(${deck.length})`}</span>
     </div>
 
   );
