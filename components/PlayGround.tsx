@@ -112,6 +112,9 @@ const PlayGround = () => {
                             topFadeRef.current.setVisibleTrue(gameState.extraCards.counter)
                         }
                     }
+                    setTimeout(()=>{
+                        SocketContext.setExtraCardsNull()
+                    }, 5000)                    
                                         
                 }
 
@@ -122,7 +125,7 @@ const PlayGround = () => {
     }
     const handleForward = () => {
         if (SocketContext && SocketContext.gameState && session && thisplayer == whoseTurn) {
-            SocketContext.gameState.players![thisPLayerIndex].deck = [...SocketContext.gameState.players![thisPLayerIndex].deck, randomDeckGen(1) ] 
+            SocketContext.gameState.players![thisPLayerIndex].deck = [...SocketContext.gameState.players![thisPLayerIndex].deck, randomDeckGen(1)[0] ] 
             if (SocketContext.gameState.clockwise) {
                 SocketContext.gameState.whoseTurn = (SocketContext.gameState.whoseTurn as number + 1) % SocketContext.gameState.players!.length
             }
