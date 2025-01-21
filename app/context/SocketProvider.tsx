@@ -34,7 +34,7 @@ export interface SocketContext {
     reqJoinRoom: (roomId: string, username: string, userEmail: string, deck: Card[]) => void,
     insideWaitingRoom: (playername: string, roomId: string) => void,
     emitForNoPlusCard : (gameStateData: GameState,playerEmail: string)=>void,
-    gotExtraCards: any | null
+    setExtraCardsNull : ()=>void,
 }
 
 export const socketContext = createContext<SocketContext | undefined>(undefined);
@@ -111,6 +111,16 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         setGameState(gameState)
     }, [])
 
+    const setExtraCardsNull = useCallback(()=>{
+        setGameState(prev=>{
+            return {
+                ...prev!,
+                extraCards: null
+            }
+                
+        })
+    },[])
+
 
 
     useEffect(() => {
@@ -144,7 +154,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     }, [])
 
     return (
-        <socketContext.Provider value={{ socketId, playersOnline, gameState, emitNewGameState, emitStartGame, reqJoinRoom, insideWaitingRoom, emitForNoPlusCard, gotExtraCards }}>
+        <socketContext.Provider value={{ socketId, playersOnline, gameState, emitNewGameState, emitStartGame, reqJoinRoom, insideWaitingRoom, emitForNoPlusCard, setExtraCardsNull }}>
             {children}
         </socketContext.Provider>
     )

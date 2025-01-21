@@ -130,6 +130,7 @@ const PlayGround = () => {
                 SocketContext.gameState.whoseTurn = (SocketContext.gameState.whoseTurn as number - 1 + SocketContext.gameState.players!.length) % SocketContext.gameState.players!.length
             }
             SocketContext.gameState!.extraCards = null
+            console.log('EXTRA CARDS GAMESTATE', SocketContext.gameState!.extraCards)
             SocketContext.emitNewGameState(SocketContext.gameState, session?.user?.email as string)
         }
     }
