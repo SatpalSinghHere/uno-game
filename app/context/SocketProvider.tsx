@@ -4,7 +4,7 @@ import { Card, cardList } from '@/utils/cardObjects'
 import React, { useCallback, useEffect, useState, createContext } from 'react'
 import { centralCardContext, CentralCardContext } from './centralCard'
 import { io, Socket } from 'socket.io-client'
-import { redirect } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import { randomDeckGen, randomString } from '@/utils/cardGen'
 import { useSession } from 'next-auth/react'
 
@@ -40,6 +40,8 @@ export interface SocketContext {
 export const socketContext = createContext<SocketContext | undefined>(undefined);
 
 const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
+
+    const router = useRouter()
 
     const [playersOnline, setPlayersOnline] = useState<string[]>([])
     const newOnlinePlayers = useCallback((players: string[]) => {
@@ -135,7 +137,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         _socket.on('new game state', handleNewGameState)
         _socket.on('Start Game', (roomId) => {
 
-            redirect(`/game/${roomId}`)            
+            router.push(`/game/${roomId}`)            
         })
         _socket.on('got extra cards', (counter, player)=>{
             console.log(`GOT EXTRA ${counter} CARDS`, player)
