@@ -45,6 +45,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
     const [playersOnline, setPlayersOnline] = useState<string[]>([])
     const newOnlinePlayers = useCallback((players: string[]) => {
+        console.log("new online players", players)
         setPlayersOnline(players)
     }, [])
 

@@ -26,11 +26,12 @@ const Waiting = () => {
     
     
     return (
-        <div>
+        <div className='flex flex-col justify-center items-center w-full h-[100vh]'>
+            <span className='text-white mb-5 text-4xl'>Waiting</span>
             {players?.map((player,index) => {
-                return <li key={index}>{player}</li>
+                return <div key={index} className='w-[70%] p-3 text-2xl bg-blue-800 text-white rounded-lg mb-3'>{index+1}. {player[2]}</div>
             })}
-            <button onClick={()=>{if(emitStartGame){emitStartGame(roomId)}}}>Start Game</button>
+            <button className='p-3 w-[20%] bg-blue-800 hover:bg-green-500 duration-200 rounded-3xl' onClick={()=>{if(emitStartGame){emitStartGame(roomId)}}}>Start Game</button>
         </div>
     )
 }
