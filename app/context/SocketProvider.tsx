@@ -29,11 +29,13 @@ export interface SocketContext {
     socketId: string,
     playersOnline: string[]
     gameState: GameState | null,
+    messages: string[],
     emitNewGameState: (newGameState: GameState, playerEmail: string) => void
     emitStartGame: (roomId: string) => void
     reqJoinRoom: (roomId: string, username: string, userEmail: string, deck: Card[]) => void,
     insideWaitingRoom: (playername: string, roomId: string) => void,
     emitForNoPlusCard : (gameStateData: GameState,playerEmail: string)=>void,
+    emitMessage : (msg : string, roomId: string) => void,
     setExtraCardsNull : ()=>void,
 }
 
@@ -68,6 +70,18 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
         }
     }, [socket])
+
+    const [messages, setMessages] = useState<string[]>(['hello', 'hi there'])
+
+    const emitMessage = useCallback((msg: string, roomId: string)=>{
+        if(socket){
+            console.log("Sending message : ", msg)
+            socket.emit("message", msg, roomId)
+        }
+        else{
+            console.log('socket not available')
+        }
+    },[])
 
     const insideWaitingRoom = useCallback((playername: string, roomId: string) => {
         if (socket) {
@@ -133,6 +147,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
             setSocketId(_socket.id as string)
             console.log('SOCKET ID ----> ', _socket.id)
         })
+        _socket.on('message', (msg:string)=>{setMessages(prev=>[...prev, msg])})
         _socket.on('new game state', recNewGameState)
         _socket.on('players waiting', newOnlinePlayers)
         _socket.on('new game state', handleNewGameState)
@@ -157,7 +172,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     }, [])
 
     return (
-        <socketContext.Provider value={{ socketId, playersOnline, gameState, emitNewGameState, emitStartGame, reqJoinRoom, insideWaitingRoom, emitForNoPlusCard, setExtraCardsNull }}>
+        <socketContext.Provider value={{ socketId, playersOnline, gameState, emitNewGameState, messages, emitMessage, emitStartGame, reqJoinRoom, insideWaitingRoom, emitForNoPlusCard, setExtraCardsNull }}>
             {children}
         </socketContext.Provider>
     )
