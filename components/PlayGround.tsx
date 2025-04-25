@@ -17,7 +17,8 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faComment} from "@fortawesome/free-solid-svg-icons";
+import { faComment, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { usePathname } from 'next/navigation';
 
 
 interface thisPlayerContextType {
@@ -32,9 +33,54 @@ export const thisPlayerContext = createContext<thisPlayerContextType>({ playerNa
 const PlayGround = () => {
     const { data: session } = useSession()
 
+
     const SocketContext = useContext(socketContext)
     const gameState = SocketContext?.gameState
     console.log('GAME STATE', gameState)
+    const messages = SocketContext?.messages
+    const sendMessage = SocketContext?.emitMessage
+
+    //chat message
+    const path = usePathname()
+    const roomId = path.split('/')[path.split('/').length - 1]
+    const [chatInput, setChatInput] = useState<string>('')
+
+    function handleSendMessage() {
+        if (sendMessage) {
+            sendMessage(chatInput, roomId)
+            setChatInput('')
+        }
+    }
+
+    //chat messsages scroll to bottom
+    const chatContainerRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        chatContainerRef.current?.scrollTo({
+            top: chatContainerRef.current.scrollHeight,
+            behavior: 'smooth',
+        })
+    }, [messages])
+
+    //"Enter" key listener to send chat message
+    // const chatInputBoxRef = useRef<HTMLInputElement>(null)
+
+    // useEffect(() => {
+    //     const inputElement = chatInputBoxRef.current;
+    //     if (inputElement) {
+    //         const handleKeyDown = (e: KeyboardEvent) => {
+    //             if (e.key === "Enter") {
+    //                 handleSendMessage();
+    //             }
+    //         };
+
+    //         inputElement.addEventListener("keydown", handleKeyDown);
+
+    //         return () => {
+    //             inputElement.removeEventListener("keydown", handleKeyDown);
+    //         };
+    //     }
+    // }, [chatInputBoxRef.current])
 
     const players = gameState?.players
     console.log('Number of players', players?.length, players)
@@ -199,8 +245,18 @@ const PlayGround = () => {
                 </div>
                 <div className='absolute bottom-10 left-10'>
                     <Popover>
-                        <PopoverTrigger className='bg-black p-2 rounded-full '>  <FontAwesomeIcon icon={faComment} />  </PopoverTrigger>
-                        <PopoverContent>Place content for the popover here.</PopoverContent>
+                        <PopoverTrigger className='p-2 rounded-full text-3xl text-white bg-sky-600 hover:bg-sky-400 duration-250 focus:bg-sky-700'>  <FontAwesomeIcon icon={faComment} />  </PopoverTrigger>
+                        <PopoverContent className='flex flex-col h-[50vh] p-2'>
+                            <div ref={chatContainerRef}>
+                                {messages && messages.map((item, index) => <li>{item}</li>)}
+                            </div>
+                            <div className='flex gap-1 mt-auto'>
+                                <input onKeyDown={(e) => {
+                                    if (e.key === 'Enter') handleSendMessage();
+                                }} value={chatInput} onChange={(e) => { setChatInput(e.target.value) }} className='p-2 bg-sky-600 focus:bg-sky-900 focus:outline-none text-white w-[80%]' type="text" />
+                                <button onClick={handleSendMessage} className='p-2 w-[20%] bg-sky-800 hover:bg-sky-600 focus:bg-sky-900'><FontAwesomeIcon icon={faPaperPlane} /></button>
+                            </div>
+                        </PopoverContent>
                     </Popover>
                 </div>
             </div>

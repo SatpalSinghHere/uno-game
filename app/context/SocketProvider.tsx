@@ -81,7 +81,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         else{
             console.log('socket not available')
         }
-    },[])
+    },[socket])
 
     const insideWaitingRoom = useCallback((playername: string, roomId: string) => {
         if (socket) {
