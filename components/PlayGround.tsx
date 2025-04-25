@@ -33,7 +33,6 @@ export const thisPlayerContext = createContext<thisPlayerContextType>({ playerNa
 const PlayGround = () => {
     const { data: session } = useSession()
 
-
     const SocketContext = useContext(socketContext)
     const gameState = SocketContext?.gameState
     console.log('GAME STATE', gameState)
@@ -47,7 +46,8 @@ const PlayGround = () => {
 
     function handleSendMessage() {
         if (sendMessage) {
-            sendMessage(chatInput, roomId)
+            const name = session?.user?.name 
+            if(name)sendMessage(`${name.split(' ')[0]} -> ${chatInput}`, roomId)
             setChatInput('')
         }
     }
