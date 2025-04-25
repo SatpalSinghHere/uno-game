@@ -45,9 +45,9 @@ const PlayGround = () => {
     const [chatInput, setChatInput] = useState<string>('')
 
     function handleSendMessage() {
-        if (sendMessage) {
+        if (sendMessage && chatInput.trim().length > 0) {
             const name = session?.user?.name 
-            if(name)sendMessage(`${name.split(' ')[0]} -> ${chatInput}`, roomId)
+            if(name)sendMessage(name, chatInput, roomId)
             setChatInput('')
         }
     }
@@ -246,9 +246,14 @@ const PlayGround = () => {
                 <div className='absolute bottom-10 left-10'>
                     <Popover>
                         <PopoverTrigger className='p-2 rounded-full text-3xl text-white bg-sky-600 hover:bg-sky-400 duration-250 focus:bg-sky-700'>  <FontAwesomeIcon icon={faComment} />  </PopoverTrigger>
-                        <PopoverContent className='flex flex-col h-[50vh] p-2'>
-                            <div ref={chatContainerRef}>
-                                {messages && messages.map((item, index) => <li>{item}</li>)}
+                        <PopoverContent ref={chatContainerRef} className='flex flex-col h-[80vh] p-2 overflow-auto text-sm'>
+                            <div className=''>
+                                {messages && messages.map((item, index) => (
+                                    <div className='hover:bg-sky-900 duration-300 p-2 rounded-lg' key={index}>
+                                        <div className="text-base text-yellow-600 font-bold">{item[0]}</div>
+                                        {item[1]}
+                                    </div>
+                                ))}
                             </div>
                             <div className='flex gap-1 mt-auto'>
                                 <input onKeyDown={(e) => {

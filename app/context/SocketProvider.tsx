@@ -29,8 +29,8 @@ export interface SocketContext {
     socketId: string,
     playersOnline: string[]
     gameState: GameState | null,
-    messages: string[],
-    emitMessage : (msg : string, roomId: string) => void,
+    messages: Array<string[]>,
+    emitMessage : (name:string, msg : string, roomId: string) => void,
     emitNewGameState: (newGameState: GameState, playerEmail: string) => void
     emitStartGame: (roomId: string) => void
     reqJoinRoom: (roomId: string, username: string, userEmail: string, deck: Card[]) => void,
@@ -71,12 +71,12 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         }
     }, [socket])
 
-    const [messages, setMessages] = useState<string[]>(['hello', 'hi there'])
+    const [messages, setMessages] = useState<Array<string[]>>([['Bruce','I am Batman'],['Peter', 'And I am Spiderman, ntmy sir, big fan']])
 
-    const emitMessage = useCallback((msg: string, roomId: string)=>{
+    const emitMessage = useCallback((name: string, msg: string, roomId: string)=>{
         if(socket){
-            console.log("Sending message : ", msg)
-            socket.emit("message", msg, roomId)
+            console.log("Sending message : ", name, msg)
+            socket.emit("message", name, msg, roomId)
         }
         else{
             console.log('socket not available')
@@ -147,7 +147,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
             setSocketId(_socket.id as string)
             console.log('SOCKET ID ----> ', _socket.id)
         })
-        _socket.on('message', (msg:string)=>{setMessages(prev=>[...prev, msg])})
+        _socket.on('message', (name:string, msg:string)=>{setMessages(prev=>[...prev, [name, msg]])})
         _socket.on('new game state', recNewGameState)
         _socket.on('players waiting', newOnlinePlayers)
         _socket.on('new game state', handleNewGameState)
