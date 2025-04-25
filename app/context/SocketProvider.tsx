@@ -30,12 +30,12 @@ export interface SocketContext {
     playersOnline: string[]
     gameState: GameState | null,
     messages: string[],
+    emitMessage : (msg : string, roomId: string) => void,
     emitNewGameState: (newGameState: GameState, playerEmail: string) => void
     emitStartGame: (roomId: string) => void
     reqJoinRoom: (roomId: string, username: string, userEmail: string, deck: Card[]) => void,
     insideWaitingRoom: (playername: string, roomId: string) => void,
     emitForNoPlusCard : (gameStateData: GameState,playerEmail: string)=>void,
-    emitMessage : (msg : string, roomId: string) => void,
     setExtraCardsNull : ()=>void,
 }
 
