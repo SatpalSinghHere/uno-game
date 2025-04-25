@@ -4,7 +4,7 @@ import SocketProvider from '../context/SocketProvider'
 const layout = ({ children }: { children: ReactNode }) => {
     return (
         <>
-            <SocketProvider>
+            <SocketProvider>                
                 {children}
             </SocketProvider>
         </>

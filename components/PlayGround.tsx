@@ -11,6 +11,15 @@ import { useSession } from 'next-auth/react';
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { FadingTextRef } from './PlayerLeft';
 
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faComment} from "@fortawesome/free-solid-svg-icons";
+
+
 interface thisPlayerContextType {
     playerName: string,
     playerEmail: string,
@@ -112,10 +121,10 @@ const PlayGround = () => {
                             topFadeRef.current.setVisibleTrue(gameState.extraCards.counter)
                         }
                     }
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         SocketContext.setExtraCardsNull()
-                    }, 5000)                    
-                                        
+                    }, 5000)
+
                 }
 
             }
@@ -125,7 +134,7 @@ const PlayGround = () => {
     }
     const handleForward = () => {
         if (SocketContext && SocketContext.gameState && session && thisplayer == whoseTurn) {
-            SocketContext.gameState.players![thisPLayerIndex].deck = [...SocketContext.gameState.players![thisPLayerIndex].deck, randomDeckGen(1)[0] ] 
+            SocketContext.gameState.players![thisPLayerIndex].deck = [...SocketContext.gameState.players![thisPLayerIndex].deck, randomDeckGen(1)[0]]
             if (SocketContext.gameState.clockwise) {
                 SocketContext.gameState.whoseTurn = (SocketContext.gameState.whoseTurn as number + 1) % SocketContext.gameState.players!.length
             }
@@ -187,6 +196,12 @@ const PlayGround = () => {
                 </div>
                 <div onClick={handleFade} className='w-[20%] cursor-pointer rounded-md absolute top-10 left-10 p-2 flex justify-center items-center font-bold text-white bg-sky-600 hover:bg-sky-400 duration-250 focus:bg-sky-700'>
                     ENABLE FADE
+                </div>
+                <div className='absolute bottom-10 left-10'>
+                    <Popover>
+                        <PopoverTrigger className='bg-black p-2 rounded-full '>  <FontAwesomeIcon icon={faComment} />  </PopoverTrigger>
+                        <PopoverContent>Place content for the popover here.</PopoverContent>
+                    </Popover>
                 </div>
             </div>
         </thisPlayerContext.Provider>
