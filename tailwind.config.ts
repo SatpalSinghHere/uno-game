@@ -66,6 +66,14 @@ const config: Config = {
   			textoutlineblack: '0px 0px 0px 2px black'
   		},
   		keyframes: {
+			meteor: {
+				"0%": { transform: "rotate(215deg) translateX(0)", opacity: "1" },
+				"70%": { opacity: "1" },
+				"100%": {
+				  transform: "rotate(215deg) translateX(-700px)",
+				  opacity: "0",
+				},
+			  },
   			fadeup: {
   				'0%': {
   					opacity: '1',
@@ -82,7 +90,8 @@ const config: Config = {
   			}
   		},
   		animation: {
-  			fadeup: 'fadeup 4s ease-out'
+  			fadeup: 'fadeup 4s ease-out',
+			"meteor-effect": "meteor 5s linear infinite"
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

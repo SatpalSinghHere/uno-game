@@ -11,6 +11,7 @@ import { faGoogle, faInstagram, faTwitter } from "@fortawesome/free-brands-svg-i
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useReportWebVitals } from 'next/web-vitals'
+import { Meteors } from "@/components/ui/meteors";
 
 export default function Home() {
   const router = useRouter()
@@ -32,8 +33,8 @@ export default function Home() {
   return (
     <>
     
-    <div className="dark w-full h-[100vh] bg-slate-800">
-      
+    <div className="dark w-full h-[100vh] bg-[#120038] overflow-hidden">
+      <Meteors />
       <div className="fixed top-1/3 left-1/2 translate-x-[-50%] translate-y-[-50%] w-[700px] h-[60%] items-center flex flex-col">
         <div className={lobster.className +' text-[200px] antialiased font-extrabold text-cyan-500 hover:font-outline-white-glow hover:text-blue-600 duration-300'}>UNO</div>
         
