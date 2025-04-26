@@ -3,10 +3,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import PlayGround from '../../../components/PlayGround'
 // import { useRouter } from 'next/compat/router'
-import { useSession } from 'next-auth/react'
+import { SessionContext, useSession } from 'next-auth/react'
 import { socketContext } from '@/app/context/SocketProvider'
 import { randomDeckGen } from '@/utils/cardGen'
 import { usePathname, useRouter } from 'next/navigation'
+import { Session } from 'next-auth'
+import { sessionContext } from '../layout'
 
 const page = () => {
   const [requested, setRequested] = useState(false)
@@ -14,10 +16,10 @@ const page = () => {
   const path = usePathname()
   const roomId = path.split('/')[path.split('/').length - 1]
 
-  const { data: session } = useSession()
-
   const SocketContext = useContext(socketContext)
   const reqJoinRoom = SocketContext?.reqJoinRoom
+  
+  const session = useContext(sessionContext)
 
   const deck = randomDeckGen(10)
   

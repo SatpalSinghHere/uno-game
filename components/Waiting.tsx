@@ -14,12 +14,13 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { sessionContext } from '@/app/game/layout'
 
 const Waiting = () => {
     const path = usePathname()
     const roomId = path.split('/')[path.split('/').length - 1]
 
-    const { data: session } = useSession()
+    const session = useContext(sessionContext)
     console.log('SESSION info : ', session)
     const SocketContext = useContext(socketContext)
     const socketId = SocketContext?.socketId

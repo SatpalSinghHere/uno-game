@@ -1,12 +1,14 @@
 'use client'
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 import SocketProvider from '../context/SocketProvider'
 import { SessionContextValue, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Session } from 'next-auth'
 
+export const sessionContext = createContext<Session | undefined>(undefined)
+
 const layout = ({ children }: { children: ReactNode }) => {
-    
+
     const { data, status } = useSession()
     const [session, setSession] = useState<Session>()
     const router = useRouter()
@@ -19,9 +21,11 @@ const layout = ({ children }: { children: ReactNode }) => {
 
     if (status === 'loading') {
         return (
+
             <div className='w-full h-[100vh] flex justify-center items-center'>
                 <div>Loading...</div>
             </div>
+
         )
     }
 
@@ -39,11 +43,11 @@ const layout = ({ children }: { children: ReactNode }) => {
         )
     }
     return (
-        <>
-            <SocketProvider>                
+        <sessionContext.Provider value={session}>
+            <SocketProvider>
                 {children}
             </SocketProvider>
-        </>
+        </sessionContext.Provider>
     )
 }
 

@@ -19,6 +19,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { usePathname } from 'next/navigation';
+import { sessionContext } from '@/app/game/layout';
 
 
 interface thisPlayerContextType {
@@ -31,7 +32,7 @@ interface thisPlayerContextType {
 export const thisPlayerContext = createContext<thisPlayerContextType>({ playerName: '', playerEmail: '' })
 
 const PlayGround = () => {
-    const { data: session } = useSession()
+    const session = useContext(sessionContext)
 
     const SocketContext = useContext(socketContext)
     const gameState = SocketContext?.gameState

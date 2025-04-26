@@ -39,8 +39,8 @@ export default function Home() {
         <div className={lobster.className +' text-[200px] antialiased font-extrabold text-cyan-500 hover:font-outline-white-glow hover:text-blue-600 duration-300'}>UNO</div>
         
         {!session && <div className="w-[500px] h-[50vh] rounded-lg -right-10 flex flex-col items-center justify-center gap-2">
-          <div className={lobster.className+" w-[400px] hover:cursor-pointer hover:w-full h-[40px] hover:bg-white text-white hover:text-black p-2 rounded-lg hover:shadow-lg flex justify-center duration-500"}><div className="mr-2" onClick={() => signIn("google")}>Sign in with Google</div>  <FontAwesomeIcon size="xl" icon={faGoogle} /></div>          
-          <div className={lobster.className+" w-[400px] hover:cursor-pointer hover:w-full h-[40px] hover:bg-white text-white hover:text-black p-2 rounded-lg hover:shadow-lg flex justify-center duration-500"}><div className="mr-2" onClick={() => signIn("twitter")}>Sign in with Twitter</div>  <FontAwesomeIcon size="xl" icon={faTwitter} /></div>
+          <div className={lobster.className+" w-[400px] hover:cursor-pointer hover:w-full h-[40px] hover:bg-white text-white hover:text-black p-2 rounded-lg hover:shadow-lg flex justify-center duration-500"}><div className="mr-2 flex" onClick={() => signIn("google")}>Sign in with Google</div>  <FontAwesomeIcon size="xl" icon={faGoogle} /></div>          
+          <div className={lobster.className+" w-[400px] hover:cursor-pointer hover:w-full h-[40px] hover:bg-white text-white hover:text-black p-2 rounded-lg hover:shadow-lg flex justify-center duration-500"}><div className="mr-2 flex" onClick={() => signIn("twitter")}>Sign in with Twitter</div>  <FontAwesomeIcon size="xl" icon={faTwitter} /></div>
         </div>}
         {session?.user && <div className="w-[300px] h-[50vh] rounded-lg -right-10 flex flex-col items-center justify-center gap-2">
           <div className={lobster.className+" w-[200px] h-[40px] text-white text-2xl rounded-lg flex justify-center duration-500"}>Welcome {session.user.name?.split(' ')[0]}!</div>
