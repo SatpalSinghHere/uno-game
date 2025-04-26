@@ -20,11 +20,11 @@ const page = () => {
   const SocketContext = useContext(socketContext)
   const reqJoinRoom = SocketContext?.reqJoinRoom
   const socketId = SocketContext?.socketId
-  
+
   const session = useContext(sessionContext)
 
   const deck = randomDeckGen(10)
-  
+
   useEffect(() => {
     if (!requested && session && reqJoinRoom && socketId) {
       setRequested(true)
@@ -33,13 +33,26 @@ const page = () => {
     }
   }, [session, socketId])
 
-  if(session && !socketId){
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault()
+      e.returnValue = '' // Needed for Chrome to trigger the confirmation dialog
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
+  }, [])
+
+  if (session && !socketId) {
     return (
-        <div className='flex flex-col gap-5 justify-center items-center text-xl h-[100vh]'>
-            <FadeLoader color={'white'} />Connecting to Server 
-        </div>
+      <div className='flex flex-col gap-5 justify-center items-center text-xl h-[100vh]'>
+        <FadeLoader color={'white'} />Connecting to Server
+      </div>
     )
-}
+  }
 
   return (
     <PlayGround />

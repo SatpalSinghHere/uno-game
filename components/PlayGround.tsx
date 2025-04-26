@@ -63,26 +63,6 @@ const PlayGround = () => {
         })
     }, [messages])
 
-    //"Enter" key listener to send chat message
-    // const chatInputBoxRef = useRef<HTMLInputElement>(null)
-
-    // useEffect(() => {
-    //     const inputElement = chatInputBoxRef.current;
-    //     if (inputElement) {
-    //         const handleKeyDown = (e: KeyboardEvent) => {
-    //             if (e.key === "Enter") {
-    //                 handleSendMessage();
-    //             }
-    //         };
-
-    //         inputElement.addEventListener("keydown", handleKeyDown);
-
-    //         return () => {
-    //             inputElement.removeEventListener("keydown", handleKeyDown);
-    //         };
-    //     }
-    // }, [chatInputBoxRef.current])
-
     const players = gameState?.players
     console.log('Number of players', players?.length, players)
     let whoseTurn: any, thisplayer: any, deck, nextPlayer, nextNextPlayer, nextNextNextPlayer, nextCardCount, nextNextCardCount, nextNextNextCardCount
