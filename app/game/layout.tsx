@@ -4,6 +4,7 @@ import SocketProvider from '../context/SocketProvider'
 import { SessionContextValue, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Session } from 'next-auth'
+import { FadeLoader } from 'react-spinners'
 
 export const sessionContext = createContext<Session | undefined>(undefined)
 
@@ -22,8 +23,8 @@ const layout = ({ children }: { children: ReactNode }) => {
     if (status === 'loading') {
         return (
 
-            <div className='w-full h-[100vh] flex justify-center items-center'>
-                <div>Loading...</div>
+            <div className='flex flex-col gap-5 justify-center items-center text-xl h-[100vh]'>
+                <FadeLoader color={'white'} />Connecting to Server 
             </div>
 
         )

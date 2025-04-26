@@ -9,6 +9,7 @@ import { randomDeckGen } from '@/utils/cardGen'
 import { usePathname, useRouter } from 'next/navigation'
 import { Session } from 'next-auth'
 import { sessionContext } from '../layout'
+import { FadeLoader } from 'react-spinners'
 
 const page = () => {
   const [requested, setRequested] = useState(false)
@@ -18,18 +19,27 @@ const page = () => {
 
   const SocketContext = useContext(socketContext)
   const reqJoinRoom = SocketContext?.reqJoinRoom
+  const socketId = SocketContext?.socketId
   
   const session = useContext(sessionContext)
 
   const deck = randomDeckGen(10)
   
   useEffect(() => {
-    if (!requested && session && reqJoinRoom) {
+    if (!requested && session && reqJoinRoom && socketId) {
       setRequested(true)
       console.log('REQUESTING TO JOIN ROOM -> ', roomId as string, session.user?.name as string, session.user?.email as string, deck)
       reqJoinRoom(roomId as string, session.user?.name as string, session.user?.email as string, deck)
     }
-  }, [session])
+  }, [session, socketId])
+
+  if(session && !socketId){
+    return (
+        <div className='flex flex-col gap-5 justify-center items-center text-xl h-[100vh]'>
+            <FadeLoader color={'white'} />Connecting to Server 
+        </div>
+    )
+}
 
   return (
     <PlayGround />

@@ -160,6 +160,9 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
             gotExtraCards.counter = counter
             gotExtraCards.playerEmail = player
         })
+        _socket.on('disconnect', ()=>{
+            setSocketId('')
+        })
         setSocket(_socket)
 
 

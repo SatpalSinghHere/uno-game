@@ -1,8 +1,8 @@
 'use client'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { socketContext } from '../app/context/SocketProvider'
-import { redirect, usePathname } from 'next/navigation'
-import { useSession } from 'next-auth/react'
+import { usePathname } from 'next/navigation'
+import {FadeLoader} from "react-spinners"
 
 import {
     Table,
@@ -36,7 +36,13 @@ const Waiting = () => {
         }
     }, [session, socketId])
 
-
+    if(session && !socketId){
+        return (
+            <div className='flex flex-col gap-5 justify-center items-center text-xl h-[100vh]'>
+                <FadeLoader color={'white'} />Connecting to Server 
+            </div>
+        )
+    }
 
     return (
         <div className='flex flex-col items-center w-full h-[100vh]'>
@@ -58,11 +64,11 @@ const Waiting = () => {
                             )
                         })}
                     </TableBody>
-                    <TableCaption>Maximum four players are allowed</TableCaption>
+                    <TableCaption className='text-xs'>Maximum four players are allowed</TableCaption>
                 </Table>
             </div>
 
-            <button className='mt-10 p-3 w-[20%] bg-blue-800 hover:bg-green-500 duration-200 rounded-3xl' onClick={() => { if (emitStartGame) { emitStartGame(roomId) } }}>Start Game</button>
+            <button className='mt-10 p-3 w-[20%] bg-blue-800 hover:bg-green-500 duration-200 rounded-3xl' onClick={() => { if (emitStartGame) { emitStartGame(roomId) } }}>Start Game 🚀</button>
         </div>
     )
 }
