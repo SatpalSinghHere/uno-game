@@ -1,12 +1,10 @@
 'use client'
-import React, { forwardRef, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import card from '@/utils/card.svg';
+import React, { forwardRef, useContext, useImperativeHandle, useState } from 'react';
+
 import CardTemplate from '@/utils/Card';
-import { Card, cardList } from '@/utils/cardObjects';
+import { Card } from '@/utils/cardObjects';
 import { GameState, socketContext } from '@/app/context/SocketProvider';
 import { thisPlayerContext } from './PlayGround';
-import { motion } from 'framer-motion';
-import CardBack from '@/utils/CardBack';
 import FadingText from './FadingText';
 
 

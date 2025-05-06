@@ -1,6 +1,4 @@
-import CardTemplate from '@/utils/Card'
 import CardBack from '@/utils/CardBack'
-import { cardList } from '@/utils/cardObjects'
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
 import FadingText from './FadingText'
 

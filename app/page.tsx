@@ -1,8 +1,8 @@
 'use client'
 
-import { dancing_script, inter, jersey_10, lobster, pacifico, roboto_mono, sixtyfour } from "./fonts";
+import { lobster, sixtyfour } from "./fonts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGithub, faGoogle, faInstagram, faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { faGithub, faGoogle} from "@fortawesome/free-brands-svg-icons";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useReportWebVitals } from 'next/web-vitals'

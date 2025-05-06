@@ -3,12 +3,9 @@ import CentralDeck from '@/components/CentralDeck';
 import PlayerLeft from '@/components/PlayerLeft';
 import PlayerRight from '@/components/PlayerRight';
 import PlayerTop from '@/components/PlayerTop';
-import UsedCards from '@/components/UsedCards';
 import VisibleCards from '@/components/VisibleCards';
 import { randomDeckGen, sortCards } from '@/utils/cardGen';
-import { Card } from '@/utils/cardObjects';
-import { useSession } from 'next-auth/react';
-import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { FadingTextRef } from './PlayerLeft';
 
 import {
