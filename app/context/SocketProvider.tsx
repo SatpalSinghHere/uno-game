@@ -1,12 +1,10 @@
 'use client'
 
-import { Card, cardList } from '@/utils/cardObjects'
+import { Card } from '@/utils/cardObjects'
 import React, { useCallback, useEffect, useState, createContext } from 'react'
-import { centralCardContext, CentralCardContext } from './centralCard'
+
 import { io, Socket } from 'socket.io-client'
-import { redirect, useRouter } from 'next/navigation'
-import { randomDeckGen, randomString } from '@/utils/cardGen'
-import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 interface SocketProviderProps {
     children: React.ReactNode
@@ -15,7 +13,7 @@ interface SocketProviderProps {
 export interface GameState {
     roomId: string | undefined,
     clockwise: boolean | undefined,
-    whoseTurn: Number | undefined,
+    whoseTurn: number | undefined,
     discardCard: Card | undefined,
     extraCards: {
         playerEmail: string,
@@ -103,7 +101,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         }
     }, [socket])
 
-    const gotExtraCards: any = {
+    const gotExtraCards: GameState['extraCards'] = {
         counter: 0,
         playerEmail: ''
     }
@@ -123,7 +121,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
     const handleNewGameState = useCallback((gameState : GameState)=>{
         console.log('Receiving new game state', gameState)
-        let audio = new Audio('/sound/new-game-state-sound.wav')
+        const audio = new Audio('/sound/new-game-state-sound.wav')
         audio.play()
         setGameState(gameState)
     }, [])
@@ -145,7 +143,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     }, [gameState]);
 
     useEffect(() => {
-        const _socket = io(process.env.SERVER_URL)
+        const _socket = io(process.env.NEXT_PUBLIC_SERVER_URL)
         _socket.on('connect', () => {
             console.log('connect to socket')
             setSocketId(_socket.id as string)

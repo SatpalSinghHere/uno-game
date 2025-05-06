@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 
 
 
-const FadingText = ({onHide, noOfCards}:{onHide : Function, noOfCards: number}) => {
+const FadingText = ({onHide, noOfCards}:{onHide : ()=>void, noOfCards: number}) => {
   useEffect(() => {
     // Hide the component after 3 seconds
     const timer = setTimeout(() => {

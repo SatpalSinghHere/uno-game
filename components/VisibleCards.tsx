@@ -14,7 +14,7 @@ const VisibleCards = forwardRef(({ deck, myTurn, firstName }: { deck: Card[], my
   const SocketContext = useContext(socketContext)
   const ThisPlayerContext = useContext(thisPlayerContext)
 
-  let gameState: GameState | null | undefined = SocketContext?.gameState
+  const gameState: GameState | null | undefined = SocketContext?.gameState
   const discardCard = gameState?.discardCard
   console.log('COUNTER', gameState?.counter)
   let hasPlusCard = false

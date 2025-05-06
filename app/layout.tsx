@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import SocketProvider from "./context/SocketProvider";
 // import { SessionProvider } from "next-auth/react";
 import { Providers } from "./context/providers";
 

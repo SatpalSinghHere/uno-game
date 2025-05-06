@@ -1,14 +1,14 @@
 'use client'
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 import SocketProvider from '../context/SocketProvider'
-import { SessionContextValue, useSession } from 'next-auth/react'
+import {useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Session } from 'next-auth'
 import { FadeLoader } from 'react-spinners'
 
 export const sessionContext = createContext<Session | undefined>(undefined)
 
-const layout = ({ children }: { children: ReactNode }) => {
+const Layout = ({ children }: { children: ReactNode }) => {
 
     const { data, status } = useSession()
     const [session, setSession] = useState<Session>()
@@ -52,4 +52,4 @@ const layout = ({ children }: { children: ReactNode }) => {
     )
 }
 
-export default layout
+export default Layout

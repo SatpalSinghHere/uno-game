@@ -13,7 +13,7 @@ const PlayerTop = forwardRef(({noOfCards, myTurn, firstName}:{noOfCards : number
     return {
       setVisibleTrue: (count: number)=>{
         setExtraCardsCount(count)
-        console.log('setting top Fade text visible', extraCardsCount)
+        console.log('setting top Fade text visible')
         setVisible(true)
       }
     }
@@ -64,5 +64,7 @@ const PlayerTop = forwardRef(({noOfCards, myTurn, firstName}:{noOfCards : number
     </div>
   )
 })
+
+PlayerTop.displayName = "PlayerTop";
 
 export default PlayerTop

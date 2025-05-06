@@ -1,10 +1,10 @@
 'use client'
 import CardBack from '@/utils/CardBack'
-import React, { forwardRef, Ref, useImperativeHandle, useState } from 'react'
+import React, { forwardRef, useImperativeHandle, useState } from 'react'
 import FadingText from './FadingText'
 
 export interface FadingTextRef {
-  setVisibleTrue: Function
+  setVisibleTrue: (count:number)=>void
 }
 
 const PlayerLeft = forwardRef(({noOfCards, myTurn, firstName}:{noOfCards : number, myTurn: boolean, firstName: string}, ref) => {
@@ -19,7 +19,6 @@ const PlayerLeft = forwardRef(({noOfCards, myTurn, firstName}:{noOfCards : numbe
     return {
       setVisibleTrue: (count: number)=>{
         setExtraCardsCount(count)
-        console.log('setting left Fade text visible', extraCardsCount)
         setVisible(true)
       }
     }
@@ -67,5 +66,7 @@ const PlayerLeft = forwardRef(({noOfCards, myTurn, firstName}:{noOfCards : numbe
     </div>
   )
 })
+
+PlayerLeft.displayName = "PlayerLeft";
 
 export default PlayerLeft

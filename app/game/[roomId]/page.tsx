@@ -3,15 +3,13 @@
 import React, { useContext, useEffect, useState } from 'react'
 import PlayGround from '../../../components/PlayGround'
 // import { useRouter } from 'next/compat/router'
-import { SessionContext, useSession } from 'next-auth/react'
 import { socketContext } from '@/app/context/SocketProvider'
 import { randomDeckGen } from '@/utils/cardGen'
-import { usePathname, useRouter } from 'next/navigation'
-import { Session } from 'next-auth'
+import { usePathname } from 'next/navigation'
 import { sessionContext } from '../layout'
 import { FadeLoader } from 'react-spinners'
 
-const page = () => {
+const Page = () => {
   const [requested, setRequested] = useState(false)
 
   const path = usePathname()
@@ -59,4 +57,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

@@ -1,7 +1,6 @@
 'use client'
 
-import CardTemplate from "@/utils/Card";
-import { Card, cardList } from "@/utils/cardObjects";
+import { Card } from "@/utils/cardObjects";
 import { createContext } from "react";
 
 export interface CentralCardContext {

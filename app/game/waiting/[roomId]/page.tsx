@@ -1,10 +1,8 @@
 'use client'
 import React from 'react'
-import SocketProvider from '@/app/context/SocketProvider'
 import Waiting from '@/components/Waiting'
-import { usePathname, useSearchParams } from 'next/navigation'
 
-const page = () => {
+const Page = () => {
 
     return (
         
@@ -13,4 +11,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Page
