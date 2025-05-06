@@ -16,7 +16,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { usePathname } from 'next/navigation';
-import { sessionContext } from '@/app/game/layout';
+import { sessionContext } from '@/app/context/SocketProvider';
 
 
 interface thisPlayerContextType {

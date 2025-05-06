@@ -3,10 +3,9 @@
 import React, { useContext, useEffect, useState } from 'react'
 import PlayGround from '../../../components/PlayGround'
 // import { useRouter } from 'next/compat/router'
-import { socketContext } from '@/app/context/SocketProvider'
+import { sessionContext, socketContext } from '@/app/context/SocketProvider'
 import { randomDeckGen } from '@/utils/cardGen'
 import { usePathname } from 'next/navigation'
-import { sessionContext } from '../layout'
 import { FadeLoader } from 'react-spinners'
 
 const Page = () => {

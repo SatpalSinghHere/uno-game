@@ -63,4 +63,6 @@ const PlayerRight = forwardRef(({ noOfCards, myTurn, firstName }: { noOfCards: n
   )
 })
 
+PlayerRight.displayName = 'PlayerRight'
+
 export default PlayerRight

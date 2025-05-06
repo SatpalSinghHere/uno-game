@@ -13,7 +13,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { sessionContext } from '@/app/game/layout'
+import { sessionContext } from '../app/context/SocketProvider'
 
 const Waiting = () => {
     const path = usePathname()

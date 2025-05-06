@@ -5,10 +5,12 @@ import React, { useCallback, useEffect, useState, createContext } from 'react'
 
 import { io, Socket } from 'socket.io-client'
 import { useRouter } from 'next/navigation'
+import { Session } from 'next-auth'
 
 interface SocketProviderProps {
     children: React.ReactNode
 }
+export const sessionContext = createContext<Session | undefined>(undefined)
 
 export interface GameState {
     roomId: string | undefined,
@@ -133,8 +135,19 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
                 extraCards: null
             }                
         })
-        console.log('setting extra cards null from socketProvider', gameState)
+        // console.log('setting extra cards null from socketProvider', gameState)
     },[socket])
+
+    const handleGotExtraCards = (counter:number, player:string)=>{
+        console.log(`GOT EXTRA ${counter} CARDS`, player)
+        gotExtraCards.counter = counter
+        gotExtraCards.playerEmail = player
+    }
+
+    const handleStartGame = (roomId:string) => {
+
+        router.push(`/game/${roomId}`)            
+    }
 
     useEffect(() => {
         if (gameState?.extraCards === null) {
@@ -153,15 +166,8 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         _socket.on('new game state', recNewGameState)
         _socket.on('players waiting', newOnlinePlayers)
         _socket.on('new game state', handleNewGameState)
-        _socket.on('Start Game', (roomId) => {
-
-            router.push(`/game/${roomId}`)            
-        })
-        _socket.on('got extra cards', (counter, player)=>{
-            console.log(`GOT EXTRA ${counter} CARDS`, player)
-            gotExtraCards.counter = counter
-            gotExtraCards.playerEmail = player
-        })
+        _socket.on('Start Game', handleStartGame)
+        _socket.on('got extra cards', handleGotExtraCards)
         _socket.on('disconnect', ()=>{
             setSocketId('')
         })

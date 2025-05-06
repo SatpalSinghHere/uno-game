@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Session } from 'next-auth'
 import { FadeLoader } from 'react-spinners'
 
-export const sessionContext = createContext<Session | undefined>(undefined)
+import { sessionContext } from '../context/SocketProvider'
 
 const Layout = ({ children }: { children: ReactNode }) => {
 

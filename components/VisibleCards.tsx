@@ -167,4 +167,6 @@ const VisibleCards = forwardRef(({ deck, myTurn, firstName }: { deck: Card[], my
   );
 })
 
+VisibleCards.displayName = 'VisibleCards'
+
 export default VisibleCards
