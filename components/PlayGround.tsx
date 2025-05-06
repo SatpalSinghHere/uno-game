@@ -148,11 +148,12 @@ const PlayGround = () => {
                             topFadeRef.current.setVisibleTrue(gameState.extraCards.counter)
                         }
                     }
-                    setTimeout(() => {
-                        SocketContext.setExtraCardsNull()
-                    }, 5000)
+                    
 
                 }
+                setTimeout(() => {
+                    SocketContext.setExtraCardsNull()
+                }, 5000)
 
             }
 

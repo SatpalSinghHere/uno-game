@@ -133,15 +133,19 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
             return {
                 ...prev!,
                 extraCards: null
-            }
-                
+            }                
         })
-    },[])
-
-
+        console.log('setting extra cards null from socketProvider', gameState)
+    },[socket])
 
     useEffect(() => {
-        const _socket = io('http://localhost:8000')
+        if (gameState?.extraCards === null) {
+            console.log('extraCards has been set to null:', gameState);
+        }
+    }, [gameState]);
+
+    useEffect(() => {
+        const _socket = io(process.env.SERVER_URL)
         _socket.on('connect', () => {
             console.log('connect to socket')
             setSocketId(_socket.id as string)
