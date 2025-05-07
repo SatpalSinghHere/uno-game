@@ -217,7 +217,7 @@ const PlayGround = () => {
                     <option value="3">3</option>
                     <option value="4">4</option>
                 </select> */}
-                <Timer className='w-[70px] h-[70px] absolute right-2 top-2'/>
+                <Timer className='w-[70px] h-[70px] absolute right-2 top-2' handleForward={handleForward}/>
                 {players?.length === 2 && <PlayerTop noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn} firstName={nextPlayer.playerName.split(' ')[0]} ref={topFadeRef} />}
                 {players?.length === 3 && (
                     <>
