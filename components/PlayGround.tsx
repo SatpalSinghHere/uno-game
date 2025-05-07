@@ -7,6 +7,7 @@ import VisibleCards from '@/components/VisibleCards';
 import { randomDeckGen, sortCards } from '@/utils/cardGen';
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { FadingTextRef } from './PlayerLeft';
+import Timer from '@/components/Timer'
 
 import {
     Popover,
@@ -14,7 +15,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { faComment, faPaperPlane, faForward } from "@fortawesome/free-solid-svg-icons";
 import { usePathname } from 'next/navigation';
 import { sessionContext } from '@/app/context/SocketProvider';
 
@@ -216,7 +217,7 @@ const PlayGround = () => {
                     <option value="3">3</option>
                     <option value="4">4</option>
                 </select> */}
-
+                <Timer className='w-[70px] h-[70px] absolute right-2 top-2'/>
                 {players?.length === 2 && <PlayerTop noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn} firstName={nextPlayer.playerName.split(' ')[0]} ref={topFadeRef} />}
                 {players?.length === 3 && (
                     <>
@@ -234,7 +235,7 @@ const PlayGround = () => {
                 <CentralDeck />
                 {deck && <VisibleCards deck={deck} myTurn={thisplayer == whoseTurn} firstName={thisplayer.playerName.split(' ')[0]} ref={bottomFadeRef} />}
                 <div onClick={handleForward} className='absolute bottom-10 right-10 flex justify-center items-center font-bold py-3 px-6 hover:px-12 bg-blue-800 hover:bg-green-400 active:bg-green-600 duration-200 rounded-3xl'>
-                    FORWARD
+                    SKIP &nbsp; <FontAwesomeIcon icon={faForward} />
                 </div>
                 <div onClick={handleFade} className='cursor-pointer absolute top-10 left-10 flex justify-center items-center font-bold py-3 px-6 hover:px-12 bg-blue-800 hover:bg-green-400 active:bg-green-600 duration-200 rounded-3xl'>
                     ENABLE FADE
