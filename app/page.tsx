@@ -29,7 +29,7 @@ export default function Home() {
     <>
     
     <div className="dark w-full h-[100vh] bg-[#120038] overflow-hidden">
-      <Meteors />
+      <Meteors number={50} />
       <div className="fixed top-1/3 left-1/2 translate-x-[-50%] translate-y-[-50%] w-[700px] h-[60%] items-center flex flex-col">
         <div className={lobster.className +' text-[200px] antialiased font-extrabold text-cyan-500 hover:font-outline-white-glow hover:text-blue-600 duration-300'}>UNO</div>
         

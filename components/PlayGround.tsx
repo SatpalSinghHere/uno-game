@@ -44,8 +44,8 @@ const PlayGround = () => {
 
     function handleSendMessage() {
         if (sendMessage && chatInput.trim().length > 0) {
-            const name = session?.user?.name 
-            if(name)sendMessage(name, chatInput, roomId)
+            const name = session?.user?.name?.split(' ')
+            if (name) sendMessage(name[0], chatInput, roomId)
             setChatInput('')
         }
     }
@@ -115,7 +115,11 @@ const PlayGround = () => {
                             topFadeRef.current.setVisibleTrue(gameState.extraCards.counter)
                         }
                     }
-                    //else
+                    else if (thisplayer.email == gameState.extraCards.playerEmail) {
+                        if (bottomFadeRef.current) {
+                            bottomFadeRef.current.setVisibleTrue(gameState.extraCards.counter)
+                        }
+                    }
                 }
                 if (players.length === 3) {
                     if ((nextPlayer.email == gameState.extraCards.playerEmail)) {
@@ -126,6 +130,11 @@ const PlayGround = () => {
                     else if (nextNextPlayer.email == gameState.extraCards.playerEmail) {
                         if (rightFadeRef.current) {
                             rightFadeRef.current.setVisibleTrue(gameState.extraCards.counter)
+                        }
+                    }
+                    else if (thisplayer.email == gameState.extraCards.playerEmail) {
+                        if (bottomFadeRef.current) {
+                            bottomFadeRef.current.setVisibleTrue(gameState.extraCards.counter)
                         }
                     }
                 }
@@ -145,7 +154,12 @@ const PlayGround = () => {
                             topFadeRef.current.setVisibleTrue(gameState.extraCards.counter)
                         }
                     }
-                    
+                    else if (thisplayer.email == gameState.extraCards.playerEmail) {
+                        if (bottomFadeRef.current) {
+                            bottomFadeRef.current.setVisibleTrue(gameState.extraCards.counter)
+                        }
+                    }
+
 
                 }
                 setTimeout(() => {
@@ -166,7 +180,10 @@ const PlayGround = () => {
             else {
                 SocketContext.gameState.whoseTurn = (SocketContext.gameState.whoseTurn as number - 1 + SocketContext.gameState.players!.length) % SocketContext.gameState.players!.length
             }
-            SocketContext.gameState!.extraCards = null
+            SocketContext.gameState!.extraCards = {
+                playerEmail: thisplayer.email,
+                counter: 1
+            }
             console.log('EXTRA CARDS GAMESTATE', SocketContext.gameState!.extraCards)
             SocketContext.emitNewGameState(SocketContext.gameState, session?.user?.email as string)
         }
@@ -192,7 +209,7 @@ const PlayGround = () => {
 
     return session && players && (
         <thisPlayerContext.Provider value={{ playerName: session?.user?.name as string, playerEmail: session?.user?.email as string }}>
-            <div className="absolute w-full h-full items-center bg-red-950">
+            <div className="absolute w-full h-full items-center bg-[#120038]">
 
                 {/* <select onChange={handlePlayerChange} value={players}>
                     <option value="2">2</option>
@@ -216,10 +233,10 @@ const PlayGround = () => {
                 )}
                 <CentralDeck />
                 {deck && <VisibleCards deck={deck} myTurn={thisplayer == whoseTurn} firstName={thisplayer.playerName.split(' ')[0]} ref={bottomFadeRef} />}
-                <div onClick={handleForward} className='w-[20%] cursor-pointer rounded-md absolute bottom-10 right-10 p-2 flex justify-center items-center font-bold text-white bg-sky-600 hover:bg-sky-400 duration-250 focus:bg-sky-700'>
+                <div onClick={handleForward} className='absolute bottom-10 right-10 flex justify-center items-center font-bold py-3 px-6 hover:px-12 bg-blue-800 hover:bg-green-400 active:bg-green-600 duration-200 rounded-3xl'>
                     FORWARD
                 </div>
-                <div onClick={handleFade} className='w-[20%] cursor-pointer rounded-md absolute top-10 left-10 p-2 flex justify-center items-center font-bold text-white bg-sky-600 hover:bg-sky-400 duration-250 focus:bg-sky-700'>
+                <div onClick={handleFade} className='cursor-pointer absolute top-10 left-10 flex justify-center items-center font-bold py-3 px-6 hover:px-12 bg-blue-800 hover:bg-green-400 active:bg-green-600 duration-200 rounded-3xl'>
                     ENABLE FADE
                 </div>
                 <div className='absolute bottom-10 left-10'>
@@ -228,9 +245,9 @@ const PlayGround = () => {
                         <PopoverContent ref={chatContainerRef} className='flex flex-col h-[80vh] p-2 overflow-auto text-sm'>
                             <div className=''>
                                 {messages && messages.map((item, index) => (
-                                    <div className='hover:bg-sky-900 duration-300 p-2 rounded-lg' key={index}>
+                                    <div className='hover:bg-sky-900 duration-300 p-2 rounded-lg flex flex-col' key={index}>
                                         <div className="text-base text-yellow-600 font-bold">{item[0]}</div>
-                                        {item[1]}
+                                        <div>{item[1]}</div>
                                     </div>
                                 ))}
                             </div>

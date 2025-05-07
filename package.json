@@ -27,8 +27,10 @@
     "next": "14.2.20",
     "next-auth": "^5.0.0-beta.25",
     "react": "^18",
+    "react-circular-progressbar": "^2.2.0",
     "react-dom": "^18",
     "react-spinners": "^0.17.0",
+    "react-timer-hook": "^4.0.5",
     "socket.io-client": "^4.8.1",
     "tailwind-merge": "^3.2.0",
     "tailwindcss-animate": "^1.0.7"

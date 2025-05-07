@@ -14,6 +14,8 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { sessionContext } from '../app/context/SocketProvider'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faLink } from '@fortawesome/free-solid-svg-icons'
 
 const Waiting = () => {
     const path = usePathname()
@@ -27,6 +29,10 @@ const Waiting = () => {
     const emitStartGame = SocketContext?.emitStartGame
     const insideWaitingRoom = SocketContext?.insideWaitingRoom
     console.log("Players Waiting", SocketContext?.playersOnline)
+
+    async function handleCopyLink(){
+        await navigator.clipboard.writeText(window.location.href)
+    }
 
     useEffect(() => {
         if (session && insideWaitingRoom && socketId) {
@@ -45,6 +51,7 @@ const Waiting = () => {
 
     return (
         <div className='flex flex-col items-center w-full h-[100vh]'>
+            <button className='mt-10 mb-10 py-3 px-6 hover:px-12 bg-blue-800 hover:bg-green-400 active:bg-green-600 duration-200 rounded-3xl' onClick={handleCopyLink}>Share link <FontAwesomeIcon icon={faLink} /></button>
             <div className='w-1/2'>
                 <Table className='w-full'>
                     <TableHeader>
@@ -67,7 +74,7 @@ const Waiting = () => {
                 </Table>
             </div>
 
-            <button className='mt-10 p-3 w-[20%] bg-blue-800 hover:bg-green-500 duration-200 rounded-3xl' onClick={() => { if (emitStartGame) { emitStartGame(roomId) } }}>Start Game 🚀</button>
+            <button className='mt-10 py-3 px-6 hover:px-12 bg-blue-800 hover:bg-green-400 active:bg-green-600 duration-200 rounded-3xl' onClick={() => { if (emitStartGame) { emitStartGame(roomId) } }}>Start Game 🚀</button>
         </div>
     )
 }
