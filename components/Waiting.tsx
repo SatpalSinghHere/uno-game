@@ -1,6 +1,6 @@
 'use client'
 import React, { useContext, useEffect } from 'react'
-import { socketContext } from '../app/context/SocketProvider'
+import { socketContext } from '../app/context/Socket'
 import { usePathname } from 'next/navigation'
 import {FadeLoader} from "react-spinners"
 
@@ -13,7 +13,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { sessionContext } from '../app/context/SocketProvider'
+import { sessionContext } from '@/app/game/layout'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLink } from '@fortawesome/free-solid-svg-icons'
 
@@ -24,7 +24,7 @@ const Waiting = () => {
     const session = useContext(sessionContext)
     console.log('SESSION info : ', session)
     const SocketContext = useContext(socketContext)
-    const socketId = SocketContext?.socketId
+    const socketId = SocketContext?.SocketId
     const players = SocketContext?.playersOnline
     const emitStartGame = SocketContext?.emitStartGame
     const insideWaitingRoom = SocketContext?.insideWaitingRoom

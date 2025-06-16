@@ -173,23 +173,34 @@ const PlayGround = () => {
 
     }
     const handleForward = () => {
-        if (SocketContext && SocketContext.gameState && session && thisplayer == whoseTurn) {
-            SocketContext.gameState.players![thisPLayerIndex].deck = [...SocketContext.gameState.players![thisPLayerIndex].deck, randomDeckGen(1)[0]]
-            if (SocketContext.gameState.clockwise) {
-                SocketContext.gameState.whoseTurn = (SocketContext.gameState.whoseTurn as number + 1) % SocketContext.gameState.players!.length
-            }
-            else {
-                SocketContext.gameState.whoseTurn = (SocketContext.gameState.whoseTurn as number - 1 + SocketContext.gameState.players!.length) % SocketContext.gameState.players!.length
-            }
-            SocketContext.gameState!.extraCards = {
-                playerEmail: thisplayer.email,
-                counter: 1
-            }
-            console.log('EXTRA CARDS GAMESTATE', SocketContext.gameState!.extraCards)
-            SocketContext.emitNewGameState(SocketContext.gameState, session?.user?.email as string)
+        if (SocketContext && gameState && SocketContext.gameState && session && thisplayer == whoseTurn) {
+            const newDeck = [...gameState.players![thisPLayerIndex].deck, randomDeckGen(1)[0]];
+            const newPlayers = [...gameState.players!];
+            newPlayers[thisPLayerIndex] = {
+                ...newPlayers[thisPLayerIndex],
+                deck: newDeck,
+            };
+
+            const newGameState = {
+                ...gameState,
+                players: newPlayers,
+                whoseTurn: gameState.clockwise
+                    ? (gameState.whoseTurn as number + 1) % gameState.players!.length
+                    : (gameState.whoseTurn as number - 1 + gameState.players!.length) % gameState.players!.length,
+                extraCards: {
+                    playerEmail: thisplayer.email,
+                    counter: 1,
+                },
+            };
+            SocketContext.emitNewGameState(newGameState, session?.user?.email as string)
+            SocketContext!.setIsTimeUp(false)
         }
     }
 
+    if (SocketContext?.isTimeUp) {
+        handleForward()
+
+    }
 
     const handleFade = () => {
         if (leftFadeRef.current) {
@@ -217,7 +228,7 @@ const PlayGround = () => {
                     <option value="3">3</option>
                     <option value="4">4</option>
                 </select> */}
-                <Timer className='w-[70px] h-[70px] absolute right-2 top-2' handleForward={handleForward}/>
+                <Timer className='w-[70px] h-[70px] absolute right-2 top-2' whoseTurn={whoseTurn} handleForward={handleForward} />
                 {players?.length === 2 && <PlayerTop noOfCards={nextCardCount} myTurn={nextPlayer == whoseTurn} firstName={nextPlayer.playerName.split(' ')[0]} ref={topFadeRef} />}
                 {players?.length === 3 && (
                     <>

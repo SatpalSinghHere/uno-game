@@ -3,10 +3,14 @@
 import React, { useContext, useEffect, useState } from 'react'
 import PlayGround from '../../../components/PlayGround'
 // import { useRouter } from 'next/compat/router'
-import { sessionContext, socketContext } from '@/app/context/SocketProvider'
+import { socketContext } from '@/app/context/Socket'
 import { randomDeckGen } from '@/utils/cardGen'
 import { usePathname } from 'next/navigation'
 import { FadeLoader } from 'react-spinners'
+import Playground2 from '@/components/Playground2'
+import { sessionContext } from '../layout'
+import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation'
+
 
 const Page = () => {
   const [requested, setRequested] = useState(false)
@@ -14,9 +18,9 @@ const Page = () => {
   const path = usePathname()
   const roomId = path.split('/')[path.split('/').length - 1]
 
-  const SocketContext = useContext(socketContext)
-  const reqJoinRoom = SocketContext?.reqJoinRoom
-  const socketId = SocketContext?.socketId
+  const sc = useContext(socketContext)
+  const reqJoinRoom = sc?.reqJoinRoom
+  const socketId = sc?.SocketId
 
   const session = useContext(sessionContext)
 
@@ -26,7 +30,7 @@ const Page = () => {
     if (!requested && session && reqJoinRoom && socketId) {
       setRequested(true)
       console.log('REQUESTING TO JOIN ROOM -> ', roomId as string, session.user?.name as string, session.user?.email as string, deck)
-      reqJoinRoom(roomId as string, session.user?.name as string, session.user?.email as string, deck)
+      reqJoinRoom(roomId as string, session.user?.name as string, session.user?.email as string)
     }
   }, [session, socketId])
 
@@ -45,14 +49,18 @@ const Page = () => {
 
   if (session && !socketId) {
     return (
-      <div className='flex flex-col gap-5 justify-center items-center text-xl h-[100vh]'>
-        <FadeLoader color={'white'} />Connecting to Server
-      </div>
+      <BackgroundGradientAnimation>
+        <div className='flex flex-col gap-5 justify-center items-center text-xl h-[100vh]'>
+          <FadeLoader color={'white'} />Connecting to Server
+        </div>
+      </BackgroundGradientAnimation>
     )
   }
 
   return (
-    <PlayGround />
+    <BackgroundGradientAnimation>
+      <Playground2 />
+    </BackgroundGradientAnimation>
   )
 }
 

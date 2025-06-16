@@ -4,11 +4,11 @@ import 'react-circular-progressbar/dist/styles.css';
 import React, { useContext, useEffect, useState } from 'react'
 import { socketContext } from '@/app/context/SocketProvider';
 
-const Timer = ({className, handleForward}:{className: string, handleForward:()=>void}) => {
+const Timer = ({className, handleForward, whoseTurn}:{className: string, whoseTurn:any, handleForward:()=>void}) => {
 
   const [seconds, setSeconds] = useState<number>(30)
   const SocketContext = useContext(socketContext)
-  const whoseTurn = SocketContext?.gameState?.whoseTurn
+  
 
   useEffect(() => {
     const interval = setInterval(() => {

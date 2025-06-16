@@ -17,11 +17,7 @@ export default function Home() {
 
   const { data: session } = useSession()
 
-  useReportWebVitals((metric) => {
-    console.log(metric)
-  })
-
-  // if (!session) {
+// if (!session) {
   //   return <h1>Loading...</h1>
   // }
 

@@ -1,12 +1,13 @@
 'use client'
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react'
-import SocketProvider from '../context/SocketProvider'
+import SocketProvider from '../context/Socket'
 import {useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Session } from 'next-auth'
 import { FadeLoader } from 'react-spinners'
+import { Toaster } from '@/components/ui/toaster'
 
-import { sessionContext } from '../context/SocketProvider'
+export const sessionContext = createContext<Session|null>(null)
 
 const Layout = ({ children }: { children: ReactNode }) => {
 
@@ -47,6 +48,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
         <sessionContext.Provider value={session}>
             <SocketProvider>
                 {children}
+                <Toaster />
             </SocketProvider>
         </sessionContext.Provider>
     )

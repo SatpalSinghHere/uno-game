@@ -11,6 +11,7 @@ export const randomDeckGen = (length: number) => {
 }
   
 export const sortCards = (deck : Card[]) => {
+    console.log('sorting deck', deck)
     return deck.sort((a, b) => {
       if (a.color > b.color) {
         return 1

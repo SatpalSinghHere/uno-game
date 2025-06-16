@@ -3,7 +3,7 @@ import React from 'react'
 const CardBack = ({ className }: { className: string }) => {
   return (
 
-    <svg width="256" height="350" viewBox="0 0 256 350" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <svg width="100%" height="100%" viewBox="0 0 256 350" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
       <g filter="url(#filter0_d_5_6)">
         <path d="M225.28 10H30.72C19.4092 10 10.24 18.9543 10.24 30V320C10.24 331.046 19.4092 340 30.72 340H225.28C236.591 340 245.76 331.046 245.76 320V30C245.76 18.9543 236.591 10 225.28 10Z" fill="#970606" />
         <path d="M30.72 10.5H225.28C236.326 10.5 245.26 19.2416 245.26 30V320C245.26 330.758 236.326 339.5 225.28 339.5H30.72C19.6741 339.5 10.74 330.758 10.74 320V30C10.74 19.2416 19.6741 10.5 30.72 10.5Z" stroke="white" />

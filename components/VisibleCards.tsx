@@ -76,6 +76,7 @@ const VisibleCards = forwardRef(({ deck, myTurn, firstName }: { deck: Card[], my
             }
           })
           console.log('Emitting NEW GAME STATE', gameState)
+          SocketContext?.setGameState(gameState)
           SocketContext?.emitNewGameState(gameState, ThisPlayerContext.playerEmail)
         }
       }
