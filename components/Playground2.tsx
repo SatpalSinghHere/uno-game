@@ -30,8 +30,8 @@ const Playground2 = () => {
   const gameState = sc?.gameState
   const setGameState = sc?.setGameState
   const emitNewGameState = sc?.emitNewGameState
-  const whoseTurn = gameState?.whoseTurn!
-  const players = gameState?.players!
+  const whoseTurn = gameState?.whoseTurn
+  const players = gameState?.players
   const roomId = gameState?.roomId
 
   const sendMessage = sc?.emitMessage
@@ -44,9 +44,9 @@ const Playground2 = () => {
   const setToast = sc?.setToast
   const emitToast = sc?.emitToast
 
-  useEffect(()=>{
-    if( Toast && setToast){
-      if (Toast !== ''){
+  useEffect(() => {
+    if (Toast && setToast) {
+      if (Toast !== '') {
         toast({
           description: Toast,
         })
@@ -118,39 +118,39 @@ const Playground2 = () => {
   // }
 
   const handlePass = () => {
-    // console.log(gameState , whoseTurn , players , userEmail, setGameState , emitNewGameState)
-    // if (gameState && whoseTurn && players && userEmail && setGameState && emitNewGameState) {
-    console.log('handling pass')
-    let newGameState: GameState = { ...gameState } as GameState
-    let nextWhoseTurn
+    if (gameState && players && whoseTurn ) {
+      console.log('handling pass')
+      let newGameState: GameState = { ...gameState } as GameState
+      let nextWhoseTurn
 
 
-    const extraCard = randomDeckGen(1)
-    players.forEach((p) => {
-      if (p.email == userEmail) {
-        let newDeck = [...p.deck, extraCard[0]]
-        newGameState.players![whoseTurn].deck = newDeck
+      const extraCard = randomDeckGen(1)
+      players.forEach((p) => {
+        if (p.email == userEmail) {
+          let newDeck = [...p.deck, extraCard[0]]
+          newGameState.players![whoseTurn].deck = newDeck
+        }
+      })
+      if (gameState) {
+        if (gameState.clockwise) {
+          nextWhoseTurn = (gameState.whoseTurn as number + 1) % players.length
+        }
+        else {
+          nextWhoseTurn = (gameState.whoseTurn as number - 1 + players.length) % players.length
+        }
       }
-    })
-    if (gameState) {
-      if (gameState.clockwise) {
-        nextWhoseTurn = (gameState.whoseTurn as number + 1) % players.length
-      }
-      else {
-        nextWhoseTurn = (gameState.whoseTurn as number - 1 + players.length) % players.length
-      }
+      newGameState = { ...newGameState, whoseTurn: nextWhoseTurn }
+      setGameState!(newGameState)
+      emitNewGameState!(newGameState, userEmail!)
+      if (emitToast) emitToast(`${thisPlayer.playerName} took a card and passed...`, roomId!)
     }
-    newGameState = { ...newGameState, whoseTurn: nextWhoseTurn }
-    setGameState!(newGameState)
-    emitNewGameState!(newGameState, userEmail!)
-    if(emitToast)emitToast(`${thisPlayer.playerName} took a card and passed...`, roomId!)
   }
 
 
 
   return (
     <div className='base w-[100vw] h-[100vh] fixed z-50'>
-      {players && session && <LayoutGroup>
+      {players && session && whoseTurn && <LayoutGroup>
         <CentralDeck />
         <div onClick={() => {
           if (players[whoseTurn].email == session?.user?.email)
@@ -183,9 +183,9 @@ const Playground2 = () => {
         <div className='absolute bottom-10 left-10'>
           <Popover>
             <PopoverTrigger
-              className={`p-2 rounded-full text-3xl text-white ${messageSeen? 'bg-sky-600 hover:bg-sky-400': 'bg-red-600 hover:bg-red-400'} duration-250`}
-              onClick={()=>{
-                if(setMessageSeen)setMessageSeen(true)
+              className={`p-2 rounded-full text-3xl text-white ${messageSeen ? 'bg-sky-600 hover:bg-sky-400' : 'bg-red-600 hover:bg-red-400'} duration-250`}
+              onClick={() => {
+                if (setMessageSeen) setMessageSeen(true)
               }}
             >
               <FontAwesomeIcon icon={faComment} />

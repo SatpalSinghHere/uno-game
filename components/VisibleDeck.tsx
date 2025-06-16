@@ -16,7 +16,7 @@ const VisibleDeck = ({ player, twoPlayersLeft }: { player: any, twoPlayersLeft: 
   const emitNewGameState = sc?.emitNewGameState
   let players = sc?.gameState?.players
   console.log('Players', players)
-  let whoseTurn = sc?.gameState?.whoseTurn!
+  let whoseTurn = sc?.gameState?.whoseTurn
   let discardCard = sc?.gameState?.discardCard
   let name, cards
   if (player) {
@@ -27,7 +27,7 @@ const VisibleDeck = ({ player, twoPlayersLeft }: { player: any, twoPlayersLeft: 
   cards = sortCards(cards!)
   const [myturn, setMyturn] = useState(false)
   useEffect(() => {
-    if (players && session && players[whoseTurn].email == session.user?.email) setMyturn(true)
+    if (players && session && whoseTurn && players[whoseTurn].email == session.user?.email) setMyturn(true)
     else setMyturn(false)
   })
   useEffect(() => {
@@ -37,7 +37,7 @@ const VisibleDeck = ({ player, twoPlayersLeft }: { player: any, twoPlayersLeft: 
   }, [myturn])
 
   const useCard = (card: Card) => {
-    if (myturn && sc && discardCard && sc.gameState && sc.gameState.players && emitNewGameState) {
+    if (myturn && sc && discardCard && sc.gameState && sc.gameState.players && emitNewGameState && whoseTurn) {
       console.log('using card')
       if (discardCard && (discardCard.value === '+2' || discardCard.value === '+4')) {
         if (card.value !== discardCard.value) {
