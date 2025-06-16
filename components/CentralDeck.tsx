@@ -9,7 +9,7 @@ import React, { useContext } from 'react'
 const CentralDeck = () => {
   
   const sc = useContext(socketContext)
-  const centralCard = sc?.gameState.discardCard
+  const centralCard = sc?.gameState?.discardCard
   
   
   return (
