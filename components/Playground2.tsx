@@ -118,7 +118,7 @@ const Playground2 = () => {
   // }
 
   const handlePass = () => {
-    if (gameState && players && whoseTurn) {
+    if (gameState && players && (whoseTurn !== undefined)) {
       console.log('handling pass')
       let newGameState: GameState = { ...gameState } as GameState
       let nextWhoseTurn
