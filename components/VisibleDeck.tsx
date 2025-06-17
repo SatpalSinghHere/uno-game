@@ -69,6 +69,7 @@ const VisibleDeck = ({ player, twoPlayersLeft }: { player: any, twoPlayersLeft: 
               let nextWhoseTurn = (sc.gameState.whoseTurn as number + 1) % sc.gameState.players.length
               newGameState = { ...newGameState, whoseTurn: nextWhoseTurn }
             }
+            sc.gameState.clockwise = !sc.gameState.clockwise
           }
           else {
             let nextWhoseTurn = (sc.gameState.whoseTurn as number + 1) % sc.gameState.players.length
