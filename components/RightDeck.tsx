@@ -11,7 +11,7 @@ const RightDeck = ({player}:{player: any}) => {
     let players = sc?.gameState?.players
     let whoseTurn = sc?.gameState?.whoseTurn
     let myturn = false
-    if(players && whoseTurn &&(player.email == players[whoseTurn].email)) myturn = true
+    if(players && (whoseTurn!==undefined) &&(player.email == players[whoseTurn].email)) myturn = true
     let name 
     if(player) {
         name = player.playerName.split(' ')[0]

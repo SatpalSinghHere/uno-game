@@ -118,19 +118,22 @@ const Playground2 = () => {
   // }
 
   const handlePass = () => {
-    if (gameState && players && whoseTurn ) {
+    if (gameState && players && whoseTurn) {
       console.log('handling pass')
       let newGameState: GameState = { ...gameState } as GameState
       let nextWhoseTurn
 
 
       const extraCard = randomDeckGen(1)
-      players.forEach((p) => {
-        if (p.email == userEmail) {
-          let newDeck = [...p.deck, extraCard[0]]
-          newGameState.players![whoseTurn].deck = newDeck
+      const updatedPlayers = [...newGameState.players!]
+      const targetIndex = updatedPlayers.findIndex(p => p.email === userEmail)
+      if (targetIndex !== -1) {
+        updatedPlayers[targetIndex] = {
+          ...updatedPlayers[targetIndex],
+          deck: [...updatedPlayers[targetIndex].deck, extraCard[0]]
         }
-      })
+        newGameState.players = updatedPlayers
+      }
       if (gameState) {
         if (gameState.clockwise) {
           nextWhoseTurn = (gameState.whoseTurn as number + 1) % players.length
@@ -150,7 +153,7 @@ const Playground2 = () => {
 
   return (
     <div className='base w-[100vw] h-[100vh] fixed z-50'>
-      {players && session && whoseTurn && <LayoutGroup>
+      {players && session && (whoseTurn !== undefined) && <LayoutGroup>
         <CentralDeck />
         <div onClick={() => {
           if (players[whoseTurn].email == session?.user?.email)
